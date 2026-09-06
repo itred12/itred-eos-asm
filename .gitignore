@@ -6,3 +6,4 @@ skypatches/Template
 # My ROMs are sourced from my completely legally purchased Explorers of Sky cartridge, from my legally purchased Nintendo DS system.
 # No part of the game is distributed in any way within the patches included in this repository. 
 *.nds
+/**/tests
