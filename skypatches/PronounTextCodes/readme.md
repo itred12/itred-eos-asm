@@ -34,7 +34,7 @@ Sample sentence:
 
 - Please send reports of any odd behavior when using this patch, as well as any suggestions or ideas regarding it, to `@itred12` on discord! Your feedback means everything!
 
-- Currently, there's no way to capitalize the replaced pronoun to use it at the beginning of a sentence. This is a limitation of the patch itself, and to fix it would be a pretty massive undertaking, but I plan to do so eventually. Eventually, there will be a second tag parameter to specify whether or not the pronoun is capitalized.
+- Currently, there's no way to capitalize the replaced pronoun to use it at the beginning of a sentence. This is a limitation of the patch itself, and to fix it would be a pretty massive undertaking, but I plan to do so eventually. At some point, there will be a second tag parameter to specify whether or not the pronoun is capitalized.
 
 
     
