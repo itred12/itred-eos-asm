@@ -1,4 +1,4 @@
-Adds the `[pr_hero:<x>]` and `[pr_partner:<x\>]` text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. 
+Adds the `[pr_hero:<x>]` and `[pr_partner:<x>]` text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. 
 
 ---
 
