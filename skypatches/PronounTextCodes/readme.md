@@ -13,7 +13,7 @@ Adds the `[pr_hero:<x>]` and `[pr_partner:<x\>]` text codes, for automatically g
 - **pos_plr**: The plural possessive pronoun (his/hers/theirs)
 
 ---
-## Example uses:
+## Example use:
 
 Sample sentence:
  - "From the way [pr_partner:pos] face dropped when [pr_partner:subj] found out [hero] wouldn't be there, because of [pr_hero:pos] injury... [pr_partner:subj] seemed so heartbroken..." <br></br>

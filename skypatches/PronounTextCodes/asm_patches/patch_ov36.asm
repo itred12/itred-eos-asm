@@ -42,7 +42,7 @@ GetPronoun:
     ; female: 0x2
     ; genderless: 0x3
 
-    ; We'll need to use r0 in a moment, so copy it to r2 instead
+    ; We'll need to use r0 in a moment, so copy it to r5 instead (first register not touched by any of the following functions we call)
     mov r5, r0 
 
 
