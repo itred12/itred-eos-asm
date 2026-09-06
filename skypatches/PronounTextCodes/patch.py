@@ -18,10 +18,10 @@ from skytemple_files.common.i18n_util import f, _
 
 # the following variables are used in the is_applied check below.
 # hex representation of the instruction you're overwriting. note that in ghidra the bytes are shown in reverse order! ex: 58 07 c1 05 -> 0x05C10758
-ORIGINAL_INSTRUCTION = 0x0a000007
+ORIGINAL_INSTRUCTION = 0x0A000007
 # address of the instruction you're overwriting minus the start point of the overlay'
 #OFFSET_EU = 0x22ED1C8-0x22DCB80 # Will implement eventually
-OFFSET_US = 0x02022de4
+OFFSET_US = 0x02022DE4-0x02000000 # arm9 starts at 0x02000000
 
 
 
@@ -39,7 +39,8 @@ class PatchHandler(AbstractPatchHandler, DependantPatch):
 Adds the [pr_hero:<x>] and [pr_partner:<x>] text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. \n
 <x> can be \"subj\" for subjective pronouns (he/she/they), \"obj\" for objective pronouns (him/her/them), \"pos\" for possessive pronouns (his/her/their), or \"pos_plr\", for plural possessives (his/hers/theirs) \n
 I.e., [pr_hero:subj], [pr_partner:pos_plr]
-Special thanks to Chesyon, happylappy, and assidion. This patch wouldn't have been possible for me to make without them!
+
+Only made possible thanks to help from Chesyon, happylappy, and assidion
     """
 
     @property
@@ -52,17 +53,19 @@ Special thanks to Chesyon, happylappy, and assidion. This patch wouldn't have be
 
     
     def depends_on(self) -> list[str]:
-        return ["ExtraSpace"] # (if the patch has any additional dependencies, those can be listed here too. ex: ["ExtraSpace", "ExpandPokeList", "TeamStatsPain"])
+        # Needed for ov36
+        return ["ExtraSpace"]
 
-    # Change all instances of overlay29 in this function to the desired overlay to check.
+
     def is_applied(self, rom: NintendoDSRom, config: Pmd2Data) -> bool:
         
-         # overlay36 = get_binary_from_rom(rom, config.bin_sections.overlay36) # Where the patch is placed
-         arm9 = get_binary_from_rom(rom, config.bin_sections.arm9) # Where we hook into for the new 'p' text codes
+         # PreprocessString is an arm9 function, so we patch into it there
+         arm9 = get_binary_from_rom(rom, config.bin_sections.arm9) 
          
          if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return read_u32(arm9, OFFSET_US) != ORIGINAL_INSTRUCTION 
+                 
            
             
          raise NotImplementedError()
