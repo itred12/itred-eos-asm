@@ -1,0 +1,8 @@
+# Template skypatch provided by Chesyon (my goat :pray:), not included in this repository, but present on my fs for convienence.
+# You can find it here: https://github.com/Chesyon/chesyon-eos-asm/tree/main/skypatches
+skypatches/Template
+
+# would rather not be nuked from the planet by copyright lawyers by uploading a full ROM to github lmfao
+# My ROMs are sourced from my completely legally purchased Explorers of Sky cartridge, from my legally purchased Nintendo DS system.
+# No part of the game is distributed in any way within the patches included in this repository. 
+*.nds
