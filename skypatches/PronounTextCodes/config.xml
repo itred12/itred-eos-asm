@@ -10,7 +10,7 @@
     <!--*******************-->
     <!--Patching steps for applying various asm patches on the game-->
     <Patches>
-      <Game id="EoS_NA" id2="EoS_EU" id3="EoS_JP">
+      <Game id="EoS_NA">
         <Patch id="PronounTextCodes">
 	      <OpenBin filepath="overlay/overlay_0036.bin">
             <Include filename ="patch_ov36.asm"/>

@@ -11,18 +11,18 @@ from typing import Callable
 from ndspy.rom import NintendoDSRom
 
 from skytemple_files.common.util import read_u32, get_binary_from_rom
-from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_EU, GAME_REGION_US, GAME_REGION_JP
+from skytemple_files.common.ppmdu_config.data import Pmd2Data, GAME_VERSION_EOS, GAME_REGION_US
 from skytemple_files.patch.category import PatchCategory
 from skytemple_files.patch.handler.abstract import AbstractPatchHandler, DependantPatch#, DependantPatch # <- uncomment this if the patch uses overlay 36.
 from skytemple_files.common.i18n_util import f, _
 
 # the following variables are used in the is_applied check below.
 # hex representation of the instruction you're overwriting. note that in ghidra the bytes are shown in reverse order! ex: 58 07 c1 05 -> 0x05C10758
-ORIGINAL_INSTRUCTION = 0x0a000004
+ORIGINAL_INSTRUCTION = 0x0a000007
 # address of the instruction you're overwriting minus the start point of the overlay'
-OFFSET_EU = 0x22ED1C8-0x22DCB80
-OFFSET_US = 0x02022dbc
-OFFSET_JP = 0x22EDE80-0x22DD8E0
+#OFFSET_EU = 0x22ED1C8-0x22DCB80 # Will implement eventually
+OFFSET_US = 0x02022de4
+
 
 
 
@@ -63,13 +63,7 @@ Special thanks to Chesyon, happylappy, and assidion. This patch wouldn't have be
          if config.game_version == GAME_VERSION_EOS:
             if config.game_region == GAME_REGION_US:
                 return read_u32(arm9, OFFSET_US) != ORIGINAL_INSTRUCTION 
-            # Don't have JP or EU offsets for these yet, sorry. I'll get 'em eventually.
-            if config.game_region == GAME_REGION_EU:
-                raise NotImplementedError()
-               #  return read_u32(arm9, OFFSET_EU) != ORIGINAL_INSTRUCTION 
-            if config.game_region == GAME_REGION_JP:
-                raise NotImplementedError()
-                # return read_u32(arm9, OFFSET_JP) != ORIGINAL_INSTRUCTION
+           
             
          raise NotImplementedError()
 
