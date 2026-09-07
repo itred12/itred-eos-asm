@@ -1,39 +1,72 @@
 .org 0x023A7080 ; Beginning of overlay 36
 // HEY!!!! MODIFY THIS LINE (after the "+") IF YOU'RE HAVING ISSUES WITH THIS PATCH CLASHING WITH ANY OTHERS YOU'RE USING!!!
 .orga 0x30F70 + 0x02000 ; Little ways into the common area to try and alleviate patch clashes
-.area 0x1D6 ; should be 470 bytes large (0x32F70 to 0x33146)
+.area 0x13A
+; 470 -> 314!!
+
+
+
+// Utility functions
+GetElementAtIndex:
+    
+    ; r1: the index of the element to find (n)
+    ; r2: the table to index
+    ; returns: r2, as the same table offset to the (n)th index
+
+    mov r7, lr ; We'll need this to return later, this return will be used in the following loop
+    mov r6, #0x0 ; also initalize this
+    b _GetElementAtIndexLoop
 
     
-HookPLetter: 
+_GetElementAtIndexLoop:
+
+    cmp r6, r1  
+    bxeq r7 ; Return to the link we stored at the beginning if we're at the target index
+
+    bl NextString ; We'll need to return to this branch from NextString, which is why we need to juggle lr to have two returns
+    add r6, #0x1
+    b _GetElementAtIndexLoop
     
+    
+NextString:
+    ; r2: the table at the starting mem address
+    ; Goes to the start of the next string in r2
+    ldrb r0, [r2]
+    add r2, #0x1 ; Term + 1 = start of next strh 
+
+    cmp r0, #0x0 ; Find terminating character
+    bxeq lr ; return 
+    
+    b NextString
+
+    
+// Main functions
+
+HookPLetter: 
+
     ; Retrieve the tag_string (the part before the ":") from register 13 at 0xb4
     ldr r0, [r13, #0xB4] 
-    
     ; Load our first tag_string to match for
     ldr r1, =TAG_HEROPR
     bl StrcmpTag ; StrcmpTag overwrites r0 with the result!
     cmp r0,#0x0
-    bne LoadHero
+    blne GetHero
+    bne StartPronounCheck
 
     ; If that isn't it, try the partner
     ldr r0, [r13, #0xB4]
     ldr r1, =TAG_PARTNERPR
     bl StrcmpTag
     cmp r0,#0x0
-    bne LoadPartner
+    blne GetPartner
+    bne StartPronounCheck
+
 
     ; If we haven't entered either of these branches, it's probably an invalid tag
     b PTagFailedBranch
 
-LoadHero: 
-    bl GetHero ; Hero now in r0
-    b GetPronoun
 
-LoadPartner: 
-    bl GetPartner ; Partner now in r0
-    b GetPronoun
-
-GetPronoun: 
+StartPronounCheck: 
     ; Grab the ID of the hero/partner, which should be in r0
     ldrh r0, [r0, #0x4]
     ; Pass it to GetMonsterGender, now we have that in r0 instead
@@ -43,140 +76,95 @@ GetPronoun:
     ; female: 0x2
     ; genderless: 0x3
 
-    ; We'll need to use r0 in a moment, so copy it to r5 instead (first register not touched by any of the following functions we call)
-    mov r5, r0 
+    mov r1, r0
+
+    ; Process "invalid" just as we would "genderless"
+    cmp r1, #0x0
+    moveq r1, #0x3
+    sub r1, #0x1 ; Subtract one now to shift it all down
+    ; male: 0x0
+    ; female: 0x1
+    ; genderless, invalid: 0x2
+    ; Conveniently matches the indexing of our PR_SUB table
 
 
-    ; Find the pronoun being used
-    ldr r0, [r13, #0xB8]
-    ldr r1, =TAGPARAM_OBJ 
+    ; Multiply by four to get the offset in the substitution table
+    mov r2, #0x4
+    mul r1, r1, r2
+    ; male: 0x0
+    ; female: 0x4
+    ; genderless, invalid: 0x8
+
+
+    ; Get the element at the index of r1, to get the start of our target set
+    ldr r2, =SUB_PR
+    bl GetElementAtIndex 
+    mov r5, r2
+
+    ; Also the offset of the 8th element (our tag param matches)
+    mov r1, #0x8
+    ldr r2, =SUB_PR
+    bl GetElementAtIndex
+    mov r4, r2
+    
+    b SelectPronounInOffset
+
+
+SelectPronounInOffset:
+   
+    ; r4: table offset to beginning of they/them set
+    ; r5: table offset to beginning of target pronoun set
+
+    ldr r0, [r13, #0xB8] ; Load the tag param
+    
+    add r1, r4, #0x0 ; Load one string of "they", "them", "their", or "theirs" into r1
     bl StrcmpTag
-    cmp r0,#0x0
-    bne GetPronounObj
-
-    ldr r0, [r13, #0xB8]
-    ldr r1, =TAGPARAM_SUBJ
-    bl StrcmpTag
-    cmp r0,#0x0
-    bne GetPronounSubj
-
+    cmp r0, #0x0
+    bne FoundPronoun
     
-    ldr r0, [r13, #0xB8]
-    ldr r1, =TAGPARAM_POS_PLR
-    bl StrcmpTag
-    cmp r0,#0x0
-    bne GetPronounPosPlr
+    ; We have to do it like this since registers 2 and 3 are used by StrcmpTag, and would be overwritten otherwise
+    mov r2, r4
+    bl NextString ; Go to next string in r2 and start again
+    mov r4, r2
+    mov r2, r5
+    bl NextString ; Also increment the target pronoun set
+    mov r5, r2
 
-    ; This would get matched before pos_plr if not put after it, I think
-    ldr r0, [r13, #0xB8]
-    ldr r1, =TAGPARAM_POS 
-    bl StrcmpTag
-    cmp r0,#0x0
-    bne GetPronounPos
-
-    ; If we went into none of these branches, it's an unrecognized tag param
-    b PTagFailedBranch
+    b SelectPronounInOffset
 
 
 
-GetPronounSubj: 
-    ; r5 is now the gender
-    cmp r5, #0x1 ; Target is male
-    ldreq r1, =SUB_HE
-    cmp r5, #0x2 ; Target is female
-    ldreq r1, =SUB_SHE
-    cmp r5, #0x3 ; Target is neutral
-    ldreq r1, =SUB_THEY
-    cmp r5, #0x0 ; Target is invalid
-    beq PTagFailedBranch ; Not sure what else we'd do here
-    ; If it's not invalid we can go to the end
-    b AppendToBuf
+FoundPronoun: 
+    ; r5: table offset to correct proper noun for target
+    add r0, r13, #0x1C8 ; Grab a pointer to the buffer 
+    add r1, r5, #0x0
     
-
-GetPronounObj: 
-    cmp r5, #0x1 ; Target is male
-    ldreq r1, =SUB_HIM
-    cmp r5, #0x2 ; Target is female
-    ldreq r1, =SUB_HER
-    cmp r5, #0x3 ; Target is neutral
-    ldreq r1, =SUB_THEM
-    cmp r5, #0x0 ; Target is invalid
-    beq PTagFailedBranch 
-    
-    b AppendToBuf
-
-GetPronounPos: 
-    cmp r5, #0x1 ; Target is male
-    ldreq r1, =SUB_HIS
-    cmp r5, #0x2 ; Target is female
-    ldreq r1, =SUB_HER
-    cmp r5, #0x3 ; Target is neutral
-    ldreq r1, =SUB_THEIR
-    cmp r5, #0x0 ; Target is invalid
-    beq PTagFailedBranch 
-    
-    b AppendToBuf
-
-GetPronounPosPlr: 
-    cmp r5, #0x1 ; Target is male
-    ldreq r1, =SUB_HIS
-    cmp r5, #0x2 ; Target is female
-    ldreq r1, =SUB_HERS
-    cmp r5, #0x3 ; Target is neutral
-    ldreq r1, =SUB_THEIRS
-    cmp r5, #0x0 ; Target is invalid
-    beq PTagFailedBranch 
-    
-    b AppendToBuf
-
-AppendToBuf: 
-    ; r1: correct proper noun for target
-   add r0,r13,#0x1C8 ; Grab the buffer (adding in this way makes r0 now a pointer to this address in r13, give or take)
-
-    ; Copy it into the buffer
-    bl strcpy 
-    add r7,r13,#0x1C8 ; (Ah, that would make this..) Put a pointer to the buffer into r7 after we modify it, where I assume it'll be accessed by the code displaying the text
+    bl strcpy
+    add r7,r13,#0x1C8 ; Put the pointer to the buffer into r7 after we modify it, where I assume it'll be accessed by the code displaying the text
     ; And we're done!
     b AfterTagIsFound
 
 
-
-
-.pool ; Set up the tags to match for. This'll use a lot of space...
+.pool ; Set up the tags to match for 
     TAG_HEROPR:
-        .asciiz "pr_hero"
+        .asciiz "pr_h"
     TAG_PARTNERPR:
-        .asciiz "pr_partner" 
-    TAGPARAM_SUBJ: ; he/she/they
-        .asciiz "subj" 
-    TAGPARAM_OBJ: ; him/her/them
-        .asciiz "obj" 
-    TAGPARAM_POS: ; his/her/their
-        .asciiz "pos" 
-    TAGPARAM_POS_PLR: ; his/hers/theirs
-        .asciiz "pos_plr" 
-    SUB_HE:
-        .asciiz "he" 
-    SUB_SHE:
-        .asciiz "she" 
-    SUB_THEY:
-        .asciiz "they" 
-    SUB_HIM:
-        .asciiz "him" 
-    SUB_HER:
-        .asciiz "her" 
-    SUB_THEM:
-        .asciiz "them" 
-    SUB_HIS:
-        .asciiz "his" 
-    SUB_THEIR:
-        .asciiz "their" 
-    SUB_HERS:
-        .asciiz "hers" 
-    SUB_THEIRS:
-        .asciiz "theirs" 
-    SUB_FORMAT:
-        .asciiz "%d" 
+        .asciiz "pr_p" 
+    SUB_PR: 
+        .asciiz "he"
+        .asciiz "him"
+        .asciiz "his"
+        .asciiz "his"
+        .asciiz "she"
+        .asciiz "her"
+        .asciiz "her"
+        .asciiz "hers"
+        .asciiz "they"
+        .asciiz "them"
+        .asciiz "their"
+        .asciiz "theirs"
+        .byte 0x0 ; Terminator, just to be eeeextra sure...
+    
         
 
 .endarea
