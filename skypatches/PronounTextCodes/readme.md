@@ -1,4 +1,4 @@
-Adds the `[pr_hero:<x>]` and `[pr_partner:<x>]` text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. 
+ Adds the `[pr_hero:<x>]` and `[pr_partner:<x>]` text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. 
 
 ---
 
@@ -30,11 +30,15 @@ Sample sentence:
 
 ## Notes:
 
-- This is my first ever Skypatch, and my first-ever real program made entirely in ASM. I've tested it consierably, but not *super* considerably. Make a backup of your ROM before applying!
+- Currently, "invalid" gender pokemon will not work with the patch. If this behavior causes issues, I adjust it so they're treated the same as genderless pokemon (but I'm not sure "invalid" is ever encountered, except in error of something else?)
 
-- Please send reports of any odd behavior when using this patch, as well as any suggestions or ideas regarding it, to `@itred12` on discord! Your feedback means everything!
+- This patch occupies addresses 0x32F70 to 0x33146! If you're able, check to make sure no other patches you're using are within this area, else they may be corrupted. All ASM patches included with Skytemple by default are unaffected by this, as the patch offset accounts for them.
 
-- Currently, there's no way to capitalize the replaced pronoun to use it at the beginning of a sentence. This is a limitation of the patch itself, and to fix it would be a pretty massive undertaking, but I plan to do so eventually. At some point, there will be a second tag parameter to specify whether or not the pronoun is capitalized.
+- This is my first ever Skypatch, and my first-ever real program made entirely in ASM. I've tested it as much as I could, but not I'm not perfect! Make a backup of your ROM before applying!
+
+- Additionally, please send reports of any bugs or odd behavior when using this patch– as well as any suggestions or ideas regarding it– to `@itred12` on discord! Your feedback means everything!
+
+- Currently, there's no way to capitalize the replaced pronoun to use it at the beginning of a sentence. This is a limitation of the patch itself, and to fix it would be a pretty massive undertaking. I plan to do so eventually, but until then, you must reword your sentences to avoid needing a pronoun at a beginning of a sentence. Sorry.
 
 
     
