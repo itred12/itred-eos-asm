@@ -1,22 +1,22 @@
- Adds the `[pr_hero:<x>]` and `[pr_partner:<x>]` text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. 
+ Adds the `[pr_h:<x>]` and `[pr_p:<x>]` text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. 
 
 ---
 
 ## Tag codes:
-- **pr_hero**: Replaced with the hero's pronoun of the given type.
-- **pr_partner**: Replaced with the partner's pronoun of the given type.
+- **pr_h**: Replaced with the hero's pronoun of the given type.
+- **pr_p**: Replaced with the partner's pronoun of the given type.
 
 ## Tag code arguments:
-- **subj**: The subjective pronoun (he/she/they)
-- **obj**: The objective pronoun (him/her/them)
-- **pos**: The possessive pronoun (his/her/their)
-- **pos_plr**: The plural possessive pronoun (his/hers/theirs)
+- **they**: The subjective pronoun (he/she/they)
+- **them**: The objective pronoun (him/her/them)
+- **their**: The possessive pronoun (his/her/their)
+- **theirs**: The plural possessive pronoun (his/hers/theirs)
 
 ---
 ## Example use:
 
 Sample sentence:
- - "From the way [pr_partner:pos] face dropped when [pr_partner:subj] found out [hero] wouldn't be there, because of [pr_hero:pos] injury... [pr_partner:subj] seemed so heartbroken..." <br></br>
+ - "From the way [pr_p:their] face dropped when [pr_p:they] found out [hero] wouldn't be there, because of [pr_h:their] injury... [pr_p:they] seemed so heartbroken..." <br></br>
 
 (With a genderless hero and female partner) <br></br>
 >"From the way her face dropped when she found out <hero\> wouldn't be there, because of their injury... she seemed so heartbroken..." 
@@ -30,9 +30,9 @@ Sample sentence:
 
 ## Notes:
 
-- Currently, "invalid" gender pokemon will not work with the patch. If this behavior causes issues, I adjust it so they're treated the same as genderless pokemon (but I'm not sure "invalid" is ever encountered, except in error of something else?)
+- "invalid" gender pokemon will be treated the same way as genderless ones (using neutral pronouns)
 
-- This patch occupies addresses 0x32F70 to 0x33146! If you're able, check to make sure no other patches you're using are within this area, else they may be corrupted. All ASM patches included with Skytemple by default are unaffected by this, as the patch offset accounts for them.
+- This patch occupies addresses 0x32F70 to 0x330AA! If you're able, check to make sure no other patches you're using are within this area, else they may be corrupted. All ASM patches included with Skytemple by default are unaffected by this, as the patch offset accounts for them.
 
 - This is my first ever Skypatch, and my first-ever real program made entirely in ASM. I've tested it as much as I could, but not I'm not perfect! Make a backup of your ROM before applying!
 

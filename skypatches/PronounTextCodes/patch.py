@@ -36,11 +36,12 @@ class PatchHandler(AbstractPatchHandler, DependantPatch):
     def description(self) -> str:
         return """
 (PMD if it was WOKE!!!) \n
-Adds the [pr_hero:<x>] and [pr_partner:<x>] text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. \n
-<x> can be \"subj\" for subjective pronouns (he/she/they), \"obj\" for objective pronouns (him/her/them), \"pos\" for possessive pronouns (his/her/their), or \"pos_plr\", for plural possessives (his/hers/theirs) \n
-I.e., [pr_hero:subj], [pr_partner:pos_plr]
+Adds the [pr_h:<x>] and [pr_p:<x>] text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. \n
+<x> can be \"they\" for subjective pronouns (he/she/they), \"them\" for objective pronouns (him/her/them), \"their\" for possessive pronouns (his/her/their), or \"theirs\", for plural possessives (his/hers/theirs) \n
+I.e., [pr_h:them], [pr_p:theirs]
 
-Only made possible thanks to help from Chesyon, happylappy, and assidion
+Only made possible thanks to help from Chesyon, Happylappy, and Assidion \n
+Greatly reduced patch size in 0.1.0 with the help of literal and metaphorical pointers from Frostbyte
     """
 
     @property
@@ -49,7 +50,7 @@ Only made possible thanks to help from Chesyon, happylappy, and assidion
 
     @property
     def version(self) -> str:
-        return '0.0.1'
+        return '0.1.0'
 
     
     def depends_on(self) -> list[str]:
