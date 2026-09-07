@@ -1,6 +1,7 @@
 .org 0x023A7080 ; Beginning of overlay 36
-.orga 0x30F70 ; Start of "common area" (not sure what that means)
-.area 0x1D6 ; should be 470 bytes large
+// HEY!!!! MODIFY THIS LINE (after the "+") IF YOU'RE HAVING ISSUES WITH THIS PATCH CLASHING WITH ANY OTHERS YOU'RE USING!!!
+.orga 0x30F70 + 0x02000 ; Little ways into the common area to try and alleviate patch clashes
+.area 0x1D6 ; should be 470 bytes large (0x32F70 to 0x33146)
 
     
 HookPLetter: 
@@ -143,7 +144,7 @@ AppendToBuf:
 
 .pool ; Set up the tags to match for. This'll use a lot of space...
     TAG_HEROPR:
-        .asciiz "pr_hero" 
+        .asciiz "pr_hero"
     TAG_PARTNERPR:
         .asciiz "pr_partner" 
     TAGPARAM_SUBJ: ; he/she/they
