@@ -104,11 +104,11 @@ For more complex sentences– or ones that use irregular plurals– the `plrep` 
 
 - This patch occupies Overlay 36, and thus, requires Skytemple's built-in `ExtraSpace` patch to be applied.
 
-- Due to the (somewhat ambitious) nature of this patch, it's somewhat large– being exactly 562 bytes (0x234) in size! It's located 0x02000 after the common area in Overlay 36 (address 0x32F70), and spans from there to address 0x331A2. 
+- Due to the (somewhat ambitious) nature of this patch, it's rather large– being exactly 562 bytes (0x234) in size! It's located 0x02000 after the common area in Overlay 36 (address 0x32F70), and spans from there to address 0x331A2. 
 
     - If you aren't certain what this means, then that's okay. Know that its location means that it won't ever conflict with any vanilla Skytemple patches, and it *hopefullly* won't conflict with many community-made patches. 
     
-    If you're using a lot of other community patches, I recommend trying to find out where they're located in Overlay 36, and adjusting this patch's offset accordingly (rename the `.skypatch` into a `.zip`, extract it, and change the line at the top of `asm_patches/patch_ov36.asm`. For re-packing it, see the `MakePatch` script file in this patch's repository).
+    - If you're using a lot of other community patches, I recommend trying to find out where they're located in Overlay 36, and adjusting this patch's offset accordingly (rename the `.skypatch` into a `.zip`, extract it, and change the line at the top of `asm_patches/patch_ov36.asm`. For re-packing it, see the `MakePatch` script file in this patch's repository).
 
 <br></br>
 
