@@ -10,3 +10,6 @@ skypatches/Template
 
 # STOP! COMMITTING! .DS_Store! I'M TIRED OF SEEING IT! IN MY PROGRAMMING REPOSITORRIES THERE'S DS_Store, IN MY SCREENSHOTS FOLDERS THERE'S FUCKING DS_Store, I had. an smb server, right? and ALLLLL of the folders has a DS_Store. 
 .DS_Store
+
+# Still in-dev
+grant_move.asm

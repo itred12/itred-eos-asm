@@ -1,156 +1,339 @@
 .org 0x023A7080 ; Beginning of overlay 36
 // HEY!!!! MODIFY THIS LINE (after the "+") IF YOU'RE HAVING ISSUES WITH THIS PATCH CLASHING WITH ANY OTHERS YOU'RE USING!!!
 .orga 0x30F70 + 0x02000 ; Little ways into the common area to try and alleviate patch clashes
-.area 0x13A
+.area 0x2AA
 ; 470 -> 314!!
 
 
 
-// Utility functions
-GetElementAtIndex:
+; ------------------------------------------------------------------------------
+;                                Utility functions
+; ------------------------------------------------------------------------------
+
+
+
+NextString:
+    ; r1: array of strings
+    ; returns: r1, offset to the next string in the array
+    ; Does not do bounds checking! Be aware!
     
-    ; r1: the index of the element to find (n)
-    ; r2: the table to index
-    ; returns: r2, as the same table offset to the (n)th index
+    mov r3, lr ; Grab the return address and put it somewhere that nds_strchr doesn't mess with, so we can return after its call
+
+    mov r0, r1
+    mov r1, #0x0 ; Load the byte "0" to search for the string terminator
+    bl nds_strchr
+    ; r0 now is the address pointing to the end of this string (terminator char)
+
+    ; Check for nullptr (pointer itself should be >0 if character is found)
+    cmp r0, #0x0
+    beq PTagFailedBranch
+
+    ; Now is address pointing to the start of the *next* string
+    add r0, #0x1
+    mov r1, r0 ; Move it back
+    bx r3 ; Return to the address we stored before
+
+
+NextNStrings:
+    
+    ; r1: the string array to index
+    ; r2: the element # in the string array to find (n)
+    ; returns: r1, as the same array offset to the (n)th index
 
     mov r7, lr ; We'll need this to return later, this return will be used in the following loop
     mov r6, #0x0 ; also initalize this
-    b _GetElementAtIndexLoop
+    mov r4, r2 ; Can't use r2 because nextString's call to nds_strchr uses it
+    
+    b _NextNStringsLoop
 
     
-_GetElementAtIndexLoop:
+_NextNStringsLoop:
 
-    cmp r6, r1  
+    cmp r6, r4
     bxeq r7 ; Return to the link we stored at the beginning if we're at the target index
 
-    bl NextString ; We'll need to return to this branch from NextString, which is why we need to juggle lr to have two returns
+    bl NextString
+    
+    ; If this returns, we found a terminator character, and have reached the next string in the array
     add r6, #0x1
-    b _GetElementAtIndexLoop
+    b _NextNStringsLoop
     
+
+GetUsableGender: 
     
-NextString:
-    ; r2: the table at the starting mem address
-    ; Goes to the start of the next string in r2
-    ldrb r0, [r2]
-    add r2, #0x1 ; Term + 1 = start of next strh 
+    ; For a ground monster in r0, 
+    ; returns their gender in r1, offset in the way we need it as:
+    ; male: 0x0
+    ; female: 0x1
+    ; genderless, invalid: 0x2
 
-    cmp r0, #0x0 ; Find terminating character
-    bxeq lr ; return 
-    
-    b NextString
+    mov r3, lr ; Store the current return address, as it'll be overwritten otherwise
 
-    
-// Main functions
-
-HookPLetter: 
-
-    ; Retrieve the tag_string (the part before the ":") from register 13 at 0xb4
-    ldr r0, [r13, #0xB4] 
-    ; Load our first tag_string to match for
-    ldr r1, =TAG_HEROPR
-    bl StrcmpTag ; StrcmpTag overwrites r0 with the result!
-    cmp r0,#0x0
-    blne GetHero
-    bne StartPronounCheck
-
-    ; If that isn't it, try the partner
-    ldr r0, [r13, #0xB4]
-    ldr r1, =TAG_PARTNERPR
-    bl StrcmpTag
-    cmp r0,#0x0
-    blne GetPartner
-    bne StartPronounCheck
-
-
-    ; If we haven't entered either of these branches, it's probably an invalid tag
-    b PTagFailedBranch
-
-
-StartPronounCheck: 
-    ; Grab the ID of the hero/partner, which should be in r0
+    ; Grab the ID
     ldrh r0, [r0, #0x4]
-    ; Pass it to GetMonsterGender, now we have that in r0 instead
     bl GetMonsterGender
+    ; r0 now holds their gender, as:
     ; invalid: 0x0
     ; male: 0x1
     ; female: 0x2
     ; genderless: 0x3
 
-    mov r1, r0
-
     ; Process "invalid" just as we would "genderless"
+    mov r1, r0 ; Move it for safe-keeping
     cmp r1, #0x0
     moveq r1, #0x3
     sub r1, #0x1 ; Subtract one now to shift it all down
     ; male: 0x0
     ; female: 0x1
     ; genderless, invalid: 0x2
-    ; Conveniently matches the indexing of our PR_SUB table
+
+    bx r3 ; return
 
 
-    ; Multiply by four to get the offset in the substitution table
-    mov r2, #0x4
-    mul r1, r1, r2
+; ------------------------------------------------------------------------------
+;                                Main functions
+; ------------------------------------------------------------------------------
+
+
+
+HookPLetter: 
+
+    ; Retrieve the tag_string (the part before the ":") from register 13 at 0xb4
+    ldr r1, =TAG_STRING
+    mov r6, #0x0 ; as well as an arbitrary counter
+    ; Start da loop
+    b FindTag
+
+
+FindTag:    
+    ; r1 should be our tag string
+    ; r6 should be an arbitrary counter
+    ldr r0, [r13, #0xB4]
+    bl StrcmpTag
+    cmp r0, #0x0
+    bne FoundTag
+
+    ; If no tag is found, increment the counter
+    add r6, #0x1
+
+    ; if the counter exceeds the amount of tags we're checking for (8, >#0x7), fail
+    cmp r6, #0x8
+    beq PTagFailedBranch
+
+    ; Go to the next string and repeat
+    bl NextString
+    b FindTag
+
+    
+
+FoundTag:
+    ; Because the partner tag is only every other tag, then if the counter has the first bit set, it's a partner tag (if r6 is odd)
+    tst r6, #1
+    bleq GetHero
+    
+    tst r6, #1  ; These functions also update the condition flags, so the test has to be done after each
+    blne GetPartner
+    
+
+    ; "updates the condition flags based on the result of subtracting the second value from the first"
+    ; this means the minus (MI) condition now returns true if the counter is 0 or 1 (pr tag)
+    cmp r6, #0x2
+    bmi StartPronounTag
+    cmp r6, #0x4 ; 2 or 3 (ifpl tag)
+    bmi StartIfPluralTag
+    cmp r6, #0x6 ; 4 or 5 (notpl tag)
+    bmi StartNotPluralTag
+
+    ; and if no others,
+    b StartPluralRepTag
+                 
+
+; ------------------------------------------------------------------------------
+;                                "pr" pronoun tag
+; ------------------------------------------------------------------------------
+
+StartPronounTag:
+
+    ; Get the hero/partner's gender real quick, multiply it by four to get the offset in the substitution table
+    bl GetUsableGender
+    mov r0, #0x4
+    mul r5, r1, r0
+    ; r5 is now:
     ; male: 0x0
     ; female: 0x4
     ; genderless, invalid: 0x8
-
-
-    ; Get the element at the index of r1, to get the start of our target set
-    ldr r2, =SUB_PR
-    bl GetElementAtIndex 
-    mov r5, r2
-
-    ; Also the offset of the 8th element (our tag param matches)
-    mov r1, #0x8
-    ldr r2, =SUB_PR
-    bl GetElementAtIndex
-    mov r4, r2
     
-    b SelectPronounInOffset
+    
+    ; Get the substitution table at the beginning of the they/them set, which we use as our tag_string_params
+    mov r2, #0x8
+    ldr r1, =TAG_STRING_REPLACEMENT
+    bl NextNStrings
+    mov r4, r1
+    mov r6, #0x0
+    
+    
+    b PronounTagSelectInOffset
 
 
-SelectPronounInOffset:
-   
+PronounTagSelectInOffset:
     ; r4: table offset to beginning of they/them set
-    ; r5: table offset to beginning of target pronoun set
+    ; r5: numerical offset to the beginning index in the table of our target set of four
 
     ldr r0, [r13, #0xB8] ; Load the tag param
     
     add r1, r4, #0x0 ; Load one string of "they", "them", "their", or "theirs" into r1
     bl StrcmpTag
     cmp r0, #0x0
-    bne FoundPronoun
-    
-    ; We have to do it like this since registers 2 and 3 are used by StrcmpTag, and would be overwritten otherwise
-    mov r2, r4
-    bl NextString ; Go to next string in r2 and start again
-    mov r4, r2
+    bne PronounTagFoundPronoun
+
+    ; If we didnt find the pronoun, add 1 to the r5 index and skip to the next string in r4
+    add r5, #0x1 
+    mov r1, r4
+    bl NextString
+    mov r4, r1
+   
+    ; Loop
+    b PronounTagSelectInOffset
+
+
+PronounTagFoundPronoun: 
+    ; r4: table offset to correct proper noun for target in the they/them set
+    ; r5: numerical index, from the start of the table, to get to the correct proper noun in the target set
     mov r2, r5
-    bl NextString ; Also increment the target pronoun set
-    mov r5, r2
-
-    b SelectPronounInOffset
-
-
-
-FoundPronoun: 
-    ; r5: table offset to correct proper noun for target
-    add r0, r13, #0x1C8 ; Grab a pointer to the buffer 
-    add r1, r5, #0x0
+    ldr r1, =TAG_STRING_REPLACEMENT
+    bl NextNStrings
+    ; r1 is now the correct string
     
-    bl strcpy
-    add r7,r13,#0x1C8 ; Put the pointer to the buffer into r7 after we modify it, where I assume it'll be accessed by the code displaying the text
+    ;add r1, r1, #0x0 ; Grab a pointer to the string at the specific address (already in the middle of the table) in r2
+    b AppendToBuf
+
+    
+; ------------------------------------------------------------------------------
+;                     "plurif" string-substitution tag
+; ------------------------------------------------------------------------------
+
+    ; Now we do things a bit differently:
+    ; the tag_string_param of this tag is instead the *contents* to be appended to the message *if* the hero/partner uses the plural pronoun (they/them/their/theirs)
+    ; hence the name, "plif" and "plnot– "if plural" / "(if) not plural"
+    ; i.e., "[pr_p:they] seem[plnot_p:s] so heartbroken..." becomes "(s)he seems so heartbroken..." or "they seem so heartbroken...",
+
+    ; To handle irregular plurals, we also have some extra functionality...
+    ; for the "plurrep" ("plural replace") tag, the contents to the left of a dividing character "|" (ascii 0x7C) will be inserted if the target does not use a plural pronoun,
+    ; and the contents to the right of that character if the target *does* use a plural pronoun
+
+    ; i.e., "Yes, [pr_h:they] ha[plrep_h:s|ve] one." becomes "Yes, (s)he has one" or "Yes, they have one",
+    ; appending either an "s" or a "ve", depending on which one is needed
+
+StartIfPluralTag:
+    
+    bl GetUsableGender
+    cmp r1, #0x2
+    bne AfterTagIsFound ; If the target does not use a plural pronoun, skip everything
+
+    b BasicPluralTag
+
+
+StartNotPluralTag:
+
+    bl GetUsableGender
+    cmp r1, #0x2
+    beq AfterTagIsFound ; If the target does not use a plural pronoun, skip everything
+
+    b BasicPluralTag
+    
+
+BasicPluralTag:
+    
+    ; Put the tag_string_param as the string to be added
+    ldr r0, [r13, #0xB8] 
+    mov r1, #0x5D ; character "]"
+    bl nds_strchr
+
+    ; Copy a terminator into this position(?)
+    mov r1, #0x0 ; terminator char
+    mov r2, #0x1 ; Fill one
+    bl nds_memset
+    
+    ldr r1, [r13, #0xB8] 
+    b AppendToBuf
+
+ 
+StartPluralRepTag: 
+
+    bl GetUsableGender
+    mov r6, r0 
+
+    ldr r0, [r13, #0xB8] 
+    mov r1, #0x7C ; Character "|"
+
+    bl nds_strchr
+    cmp r0, #0x0 ; If we don't find one, then fail
+    beq PTagFailedBranch
+
+    mov r1, #0x0 ; terminator char
+    mov r2, #0x1 ; Fill one
+    bl nds_memset
+    
+    ldr r1, [r13, #0xB8]
+
+    ; Now there's two strings, one to the left and one to the right
+    ; If we're using the one to the right, use NextString to get to it from the pointer to tag_string_param
+    ; otherwise, return to the start of the tag_string_param
+    cmp r6, #0x2
+    bne PluralRepRight
+    
+    b AppendToBuf
+
+
+
+PluralRepRight:
+    
+    bl NextString 
+    mov r6, r1 ; Copy the address of the start of this string for use later
+    mov r1, #0x5D ; character "]"
+    bl nds_strchr
+
+    ; Copy a terminator into this position
+    mov r1, #0x0 ; terminator char
+    mov r2, #0x1 ; Fill one
+    bl nds_memset
+
+    mov r1, r6 ; Move it back
+    b AppendToBuf
+
+
+; ------------------------------------------------------------------------------
+
+AppendToBuf:
+    ; r1 should contain the string to be placed into the buffer
+
+    add r0, r13, #0x1C8 ; Grab a pointer to the buffer 
+    bl nds_strcpy ; Copy r1 into it
+    add r7, r13, #0x1C8 ; Put another pointer to the buffer into r7 after we modify it, where I assume it'll be accessed by the code displaying the text
+    
     ; And we're done!
     b AfterTagIsFound
 
 
+    
+
 .pool ; Set up the tags to match for 
-    TAG_HEROPR:
+    TAG_STRING:
+        ; Pronoun tags, "pronoun hero" and "pronoun partner"
         .asciiz "pr_h"
-    TAG_PARTNERPR:
         .asciiz "pr_p" 
-    SUB_PR: 
+        ; String-tweaking tags, 
+        ; "if plural hero", "if plural partner", 
+        ; "(if) not plural hero", "(if) not plural partner",
+        ; "plural replace hero", and "plural replace partner",
+        .asciiz "plif_h"
+        .asciiz "plif_p"
+        .asciiz "plnot_h"
+        .asciiz "plnot_p"
+        .asciiz "plrep_h"
+        .asciiz "plrep_p"
+        
+    TAG_STRING_REPLACEMENT: 
         .asciiz "he"
         .asciiz "him"
         .asciiz "his"
@@ -164,7 +347,7 @@ FoundPronoun:
         .asciiz "their"
         .asciiz "theirs"
         .byte 0x0 ; Terminator, just to be eeeextra sure...
-    
-        
+    FORMAT_STRING:
+        .asciiz "%d"
 
 .endarea
