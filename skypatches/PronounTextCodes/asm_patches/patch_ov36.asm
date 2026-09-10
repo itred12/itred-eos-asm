@@ -1,8 +1,12 @@
 .org 0x023A7080 ; Beginning of overlay 36
 // HEY!!!! MODIFY THIS LINE (after the "+") IF YOU'RE HAVING ISSUES WITH THIS PATCH CLASHING WITH ANY OTHERS YOU'RE USING!!!
 .orga 0x30F70 + 0x02000 ; Little ways into the common area to try and alleviate patch clashes
-.area 0x2AA
+.area 0x234
 ; 470 -> 314!!
+
+; After new tag set: 314 -> 562
+; Not nearly as bad as I was expecting
+; + potentially some room for more optimization
 
 
 
@@ -16,7 +20,6 @@ NextString:
     ; r1: array of strings
     ; returns: r1, offset to the next string in the array
     ; Does not do bounds checking! Be aware!
-    
     mov r3, lr ; Grab the return address and put it somewhere that nds_strchr doesn't mess with, so we can return after its call
 
     mov r0, r1
@@ -66,7 +69,6 @@ GetUsableGender:
     ; male: 0x0
     ; female: 0x1
     ; genderless, invalid: 0x2
-
     mov r3, lr ; Store the current return address, as it'll be overwritten otherwise
 
     ; Grab the ID
@@ -89,6 +91,16 @@ GetUsableGender:
 
     bx r3 ; return
 
+
+ReplaceWithTerminator:
+    ; Places a terminator character (0x0) into the pointer to a string r0
+    mov r5, lr ; Need to return after the call to nds_memset
+
+    mov r1, #0x0 ; terminator char
+    mov r2, #0x1 ; Fill one
+    bl nds_memset
+
+    bx r5
 
 ; ------------------------------------------------------------------------------
 ;                                Main functions
@@ -134,6 +146,7 @@ FoundTag:
     tst r6, #1  ; These functions also update the condition flags, so the test has to be done after each
     blne GetPartner
     
+    bl GetUsableGender
 
     ; "updates the condition flags based on the result of subtracting the second value from the first"
     ; this means the minus (MI) condition now returns true if the counter is 0 or 1 (pr tag)
@@ -154,8 +167,7 @@ FoundTag:
 
 StartPronounTag:
 
-    ; Get the hero/partner's gender real quick, multiply it by four to get the offset in the substitution table
-    bl GetUsableGender
+    ; multiply gender by four to get the offset in the substitution table
     mov r0, #0x4
     mul r5, r1, r0
     ; r5 is now:
@@ -170,7 +182,6 @@ StartPronounTag:
     bl NextNStrings
     mov r4, r1
     mov r6, #0x0
-    
     
     b PronounTagSelectInOffset
 
@@ -204,7 +215,6 @@ PronounTagFoundPronoun:
     bl NextNStrings
     ; r1 is now the correct string
     
-    ;add r1, r1, #0x0 ; Grab a pointer to the string at the specific address (already in the middle of the table) in r2
     b AppendToBuf
 
     
@@ -226,16 +236,16 @@ PronounTagFoundPronoun:
 
 StartIfPluralTag:
     
-    bl GetUsableGender
+    ; Do nothing if gender is not plural
     cmp r1, #0x2
-    bne AfterTagIsFound ; If the target does not use a plural pronoun, skip everything
+    bne AfterTagIsFound 
 
     b BasicPluralTag
 
 
 StartNotPluralTag:
 
-    bl GetUsableGender
+    ; Do nothing if gender is plural
     cmp r1, #0x2
     beq AfterTagIsFound ; If the target does not use a plural pronoun, skip everything
 
@@ -248,11 +258,8 @@ BasicPluralTag:
     ldr r0, [r13, #0xB8] 
     mov r1, #0x5D ; character "]"
     bl nds_strchr
-
-    ; Copy a terminator into this position(?)
-    mov r1, #0x0 ; terminator char
-    mov r2, #0x1 ; Fill one
-    bl nds_memset
+    ; Overwrite it with a terminator
+    bl ReplaceWithTerminator
     
     ldr r1, [r13, #0xB8] 
     b AppendToBuf
@@ -260,8 +267,8 @@ BasicPluralTag:
  
 StartPluralRepTag: 
 
-    bl GetUsableGender
-    mov r6, r0 
+    ; Store gender for safekeeping
+    mov r6, r1 
 
     ldr r0, [r13, #0xB8] 
     mov r1, #0x7C ; Character "|"
@@ -270,9 +277,7 @@ StartPluralRepTag:
     cmp r0, #0x0 ; If we don't find one, then fail
     beq PTagFailedBranch
 
-    mov r1, #0x0 ; terminator char
-    mov r2, #0x1 ; Fill one
-    bl nds_memset
+    bl ReplaceWithTerminator
     
     ldr r1, [r13, #0xB8]
 
@@ -280,7 +285,7 @@ StartPluralRepTag:
     ; If we're using the one to the right, use NextString to get to it from the pointer to tag_string_param
     ; otherwise, return to the start of the tag_string_param
     cmp r6, #0x2
-    bne PluralRepRight
+    beq PluralRepRight
     
     b AppendToBuf
 
@@ -293,10 +298,7 @@ PluralRepRight:
     mov r1, #0x5D ; character "]"
     bl nds_strchr
 
-    ; Copy a terminator into this position
-    mov r1, #0x0 ; terminator char
-    mov r2, #0x1 ; Fill one
-    bl nds_memset
+    bl ReplaceWithTerminator
 
     mov r1, r6 ; Move it back
     b AppendToBuf
@@ -347,7 +349,5 @@ AppendToBuf:
         .asciiz "their"
         .asciiz "theirs"
         .byte 0x0 ; Terminator, just to be eeeextra sure...
-    FORMAT_STRING:
-        .asciiz "%d"
 
 .endarea
