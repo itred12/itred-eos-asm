@@ -50,7 +50,7 @@ Greatly reduced patch size in 0.1.0 with the help of literal and metaphorical po
 
     @property
     def version(self) -> str:
-        return '0.1.0'
+        return '0.2.0'
 
     
     def depends_on(self) -> list[str]:
