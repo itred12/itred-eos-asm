@@ -16,13 +16,11 @@
 - `theirs`: The plural possessive pronoun (his/hers/theirs)
 
 ## Grammar tag codes:
-- `plif_h`, `plif_p`: "**IF** **PL**ural **H**ero/**P**artner"  – Inserts the contents of the tag parameter to the string <u>*if*</u> the hero or partner (respectively) uses a plural pronoun. Replaced with empty space otherwise.
+- `plif_h`, `plif_p`: "**IF** **PL**ural **H**ero/**P**artner"  – Inserts the contents of the tag parameter into the line <u>*if*</u> the hero or partner (respectively) uses a plural pronoun. Replaced with empty space otherwise.
 
-- `plnot_h`, `plnot_p`: "(if) **NOT** **PL**ural **H**ero/**P**artner" –  Inserts the contents of the tag parameter to the string if the hero or partner <u>*does not*</u> use a plural pronoun. Replaced with empty space otherwise.
+- `plnot_h`, `plnot_p`: "(if) **NOT** **PL**ural **H**ero/**P**artner" –  Inserts the contents of the tag parameter into the line if the hero or partner <u>*does not*</u> use a plural pronoun. Replaced with empty space otherwise.
 
-- `plrep_h`, `plrep_p`: "**PL**ural **REP**lace **H**ero/**P**artner" –  Requires a dividing character "|" (vertical slash) within the tag parameter. Appends the contents of the tag parameter to the <u>*left*</u> of this divider if the hero or partner  <u>*does not*</u> use a plural pronoun, and the contents of the tag paramter to the <u>*right*</u> of this divider if they do.
-
-<br></br>
+- `plrep_h`, `plrep_p`: "**PL**ural **REP**lace **H**ero/**P**artner" –  Requires a dividing character "|" (vertical slash) within the tag parameter. Inseerts the contents of the tag parameter to the <u>*left*</u> of this divider if the hero or partner <u>*does not*</u> use a plural pronoun, and the contents of the tag paramter to the <u>*right*</u> of this divider if they do.
 
 ---
 # USAGE:
@@ -33,40 +31,32 @@ This can be used in basic lines of dialogue to avoid needing an unwieldy switch 
 
  `"Hey, is that... [hero]? But who's the Pokémon next to [pr_h:them]...?"` <br></br>
 
-- (With a male hero) <br></br>
->"Hey, is that... <heroname\>? But who's the Pokémon next to him...?" 
+- (With a male hero) 
+  >"Hey, is that... <heroname\>? But who's the Pokémon next to him...?" 
 
-- (With a female hero) <br></br>
->"Hey, is that... <heroname\>? But who's the Pokémon next to her...?" 
+- (With a female hero) 
+  >"Hey, is that... <heroname\>? But who's the Pokémon next to her...?" 
 
-- (With a genderless hero) <br></br>
->"Hey, is that... <heroname\>? But who's the Pokémon next to them...?" 
-
-<br></br>
+- (With a genderless hero) 
+  >"Hey, is that... <heroname\>? But who's the Pokémon next to them...?" 
 
 ---
-
-<br></br>
 
 Or in more complex lines of dialogue, which would normally require a "nightmare spaghetti mess" of switch cases to account for all possible combinations:
 
 ### **Sample sentence 2**:
  `"From the way [partner]'s face dropped when [pr_p:they] found out [hero] wouldn't be there, because of [pr_h:their] injury... [pr_p:they] seemed so heartbroken..."` <br></br>
 
-- (With a genderless hero and female partner) <br></br>
->"From the way <partnername\>'s face dropped when she found out <heroname\> wouldn't be there, because of their injury... she seemed so heartbroken..." 
+- (With a genderless hero and female partner) 
+  >"From the way <partnername\>'s face dropped when she found out <heroname\> wouldn't be there, because of their injury... she seemed so heartbroken..." 
 
-- (With a male hero and genderless partner) <br></br>
- >"From the way <partnername\>'s face dropped when they found out <heroname\> wouldn't be there, because of his injury... they seemed so heartbroken..." <br></br>
+- (With a male hero and genderless partner)
+  >"From the way <partnername\>'s face dropped when they found out <heroname\> wouldn't be there, because of his injury... they seemed so heartbroken..." <br></br>
 
-- (With a female hero and female partner) <br></br>
- >"From the way <partnername\>'s face dropped when she found out <heroname\> wouldn't be there, because of her injury... she seemed so heartbroken..." <br></br>
-
-<br></br>
+- (With a female hero and female partner) 
+  >"From the way <partnername\>'s face dropped when she found out <heroname\> wouldn't be there, because of her injury... she seemed so heartbroken..." <br></br>
 
 ---
-
-<br></br>
 
 To account for the pronoun used for a genderless hero/partner technically being a plural pronoun, the grammar / string-substitution tags can be used, such as to append an "s" to a word when needed:
 
@@ -74,19 +64,15 @@ To account for the pronoun used for a genderless hero/partner technically being 
 `"Oh, [pr_h:they] seem[plnot_h:s] to be coming to..."`
 
 - (With a female hero)
-> "Oh, she seems to be coming to..."
+ > "Oh, she seems to be coming to..."
 
 - (With a male hero)
-> "Oh, he seems to be coming to..."
+  > "Oh, he seems to be coming to..."
 
 - (With a genderless hero)
-> "Oh, they seem to be coming to..."
-
-<br></br>
+  > "Oh, they seem to be coming to..."
 
 ---
-
-<br></br>
 
 For more complex sentences– or ones that use irregular plurals– the `plrep` tag can be used to account for either case:
 
@@ -94,15 +80,13 @@ For more complex sentences– or ones that use irregular plurals– the `plrep` 
 "Well, `[pr_p:they]` certainly ha`[plrep_p:s|ve]` a funny way of doing things..."
 
 - (With a male partner)
-> "Well, he certainly has a funny way of doing things..."
+  > "Well, he certainly has a funny way of doing things..."
 
 - (With a female partner)
-> "Well, she certainly has a funny way of doing things..."
+  > "Well, she certainly has a funny way of doing things..."
 
 - (With a genderless partner)
-> "Well, they certainly have a funny way of doing things..."
-
-<br></br>
+  > "Well, they certainly have a funny way of doing things..."
 
 ---
 
