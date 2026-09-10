@@ -58,7 +58,7 @@ Or in more complex lines of dialogue, which would normally require a "nightmare 
 
 ---
 
-To account for the pronoun used for a genderless hero/partner technically being a plural pronoun, the grammar / string-substitution tags can be used, such as to append an "s" to a word when needed:
+To account for the pronoun used for a genderless hero/partner potentially being a plural pronoun, the grammar / string-substitution tags can be used, such as to append an "s" to a word when needed:
 
 ### **Sample sentence 3**:
 `"Oh, [pr_h:they] seem[plnot_h:s] to be coming to..."`
