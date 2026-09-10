@@ -64,7 +64,7 @@ To account for the pronoun used for a genderless hero/partner technically being 
 `"Oh, [pr_h:they] seem[plnot_h:s] to be coming to..."`
 
 - (With a female hero)
- > "Oh, she seems to be coming to..."
+  > "Oh, she seems to be coming to..."
 
 - (With a male hero)
   > "Oh, he seems to be coming to..."
