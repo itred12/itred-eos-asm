@@ -1,13 +1,12 @@
 .org 0x023A7080 ; Beginning of overlay 36
-// HEY!!!! MODIFY THIS LINE (after the "+") IF YOU'RE HAVING ISSUES WITH THIS PATCH CLASHING WITH ANY OTHERS YOU'RE USING!!!
-.orga 0x30F70 + 0x02000 ; Little ways into the common area to try and alleviate patch clashes
+
+// HEY!!!! MODIFY THIS LINE (the part after the "+") IF YOU'RE HAVING ISSUES WITH THIS PATCH CLASHING WITH ANY OTHERS YOU'RE USING!!!
+.orga 0x30F70 + 0x02000 ; Change 0x02000 to a different offset if another patch you're using also occupies this area
 .area 0x234
-; 470 -> 314!!
 
 ; After new tag set: 314 -> 562
 ; Not nearly as bad as I was expecting
 ; + potentially some room for more optimization
-
 
 
 ; ------------------------------------------------------------------------------

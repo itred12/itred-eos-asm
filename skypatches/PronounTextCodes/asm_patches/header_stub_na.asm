@@ -8,14 +8,16 @@
 
 ; add more labels using the same syntax as above if desired.
 
-
+; Floating addresses
 .defineLabel BranchCallToFailedPTag, 0x02022de4
 .defineLabel PTagFailedBranch, 0x02022e08
+.definelabel AfterTagIsFound, 0x020232f0
+
+; Function-reference addresses 
 .defineLabel StrcmpTag, 0x020208C8
 .defineLabel GetHero, 0x02055770
 .defineLabel GetPartner, 0x02055798
 .defineLabel GetMonsterGender, 0x020527A8
-.definelabel AfterTagIsFound, 0x020232f0
 
 .defineLabel nds_strcpy, 0x02089694
 .defineLabel nds_strcmp, 0x0208982c

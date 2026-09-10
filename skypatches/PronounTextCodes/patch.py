@@ -35,13 +35,30 @@ class PatchHandler(AbstractPatchHandler, DependantPatch):
     @property
     def description(self) -> str:
         return """
-(PMD if it was WOKE!!!) \n
-Adds the [pr_h:<x>] and [pr_p:<x>] text codes, for automatically grabbing the pronouns of the hero or partner in dialogue. \n
-<x> can be \"they\" for subjective pronouns (he/she/they), \"them\" for objective pronouns (him/her/them), \"their\" for possessive pronouns (his/her/their), or \"theirs\", for plural possessives (his/hers/theirs) \n
-I.e., [pr_h:them], [pr_p:theirs]
+(PMD if it was WOKE!!!)
 
-Only made possible thanks to help from Chesyon, Happylappy, and Assidion \n
-Greatly reduced patch size in 0.1.0 with the help of literal and metaphorical pointers from Frostbyte
+Adds the following text tags:
+
+PRONOUN TAGS:
+- [pr_h:<x>], [pr_p:<x>]: "PRonoun Hero/Partner"
+Obtains the pronoun the hero or partner uses, based on their pokemon's gender. 
+
+The tag parameter, <x> can be any of \"they\" for subjective pronouns (he/she/they), \"them\" for objective pronouns (him/her/them), \"their\" for possessive pronouns (his/her/their), and \"theirs\" for plural possessives (his/hers/theirs).
+
+GRAMMAR TAGS:
+- [plif_h:<y>], [plif_p:<y>]: "IF PLural Hero/Partner"
+Replaced with its tag parameter, <y>, *if* the hero or partner uses the plural pronoun (they/them). \n
+- [plnot_h:<y>], [plnot_p:<y>]: "(if) NOT PLural Hero/Partner"
+Replaced with its tag parameter, <y>, if the hero or partner *does not* use the plural pronoun (they/them). \n
+- [plrep_h:<y>|<z>], [plrep_p:<y>|<z>]: "PLural REPlace Hero/Partner"
+Requires a divider "|" (vertical slash) within the tag parameter. The tag is replaced with the contents to the left of this divider, <y>, if the hero/partner does *not* use the plural pronoun, and the contents to the right of the divider, <z>, if they do.
+
+These tags are to be used alongside the pronoun tags to account for minor sentence differences with the plural pronoun (they/them)
+"[pr_h:they] seem[plnot_h:s]" -> "he/she seems" or "they seem"
+"[pr_p:they] ha[plrep_p:s|ve]" -> "he/she has" or "they have"
+
+
+Only made possible thanks to the incredible help and patience of Chesyon, Happylappy, Frostbyte, and Assidion. \n
     """
 
     @property
