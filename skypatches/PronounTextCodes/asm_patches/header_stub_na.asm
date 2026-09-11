@@ -26,5 +26,5 @@
 ;.defineLabel nds_strncpy, 0x0208975c
 ;.defineLabel nds_strlen, 0x02089678
 ;.defineLabel nds_strcat, 0x020897ac
-.defineLabel nds_memset, 0x02087308 ; Sortof like a weird version of string.repeat() in other languages
+;.defineLabel nds_memset, 0x02087308 ; Sortof like a weird version of string.repeat() in other languages
 

@@ -35,30 +35,23 @@ class PatchHandler(AbstractPatchHandler, DependantPatch):
     @property
     def description(self) -> str:
         return """
-(PMD if it was WOKE!!!)
-
 Adds the following text tags:
 
 PRONOUN TAGS:
-- [pr_h:<x>], [pr_p:<x>]: "PRonoun Hero/Partner"
-Obtains the pronoun the hero or partner uses, based on their pokemon's gender. 
-
-The tag parameter, <x> can be any of \"they\" for subjective pronouns (he/she/they), \"them\" for objective pronouns (him/her/them), \"their\" for possessive pronouns (his/her/their), and \"theirs\" for plural possessives (his/hers/theirs).
+- [pr_h:<x>],  [pr_p:<x>]  –  "PRonoun Hero" / "PRonoun Partner"
+<x> can be \"they\", \"them\", \"their\", or \"theirs\", which will become the corrosponding pronoun for the target.
 
 GRAMMAR TAGS:
-- [plif_h:<y>], [plif_p:<y>]: "IF PLural Hero/Partner"
-Replaced with its tag parameter, <y>, *if* the hero or partner uses the plural pronoun (they/them). \n
-- [plnot_h:<y>], [plnot_p:<y>]: "(if) NOT PLural Hero/Partner"
-Replaced with its tag parameter, <y>, if the hero or partner *does not* use the plural pronoun (they/them). \n
-- [plrep_h:<y>|<z>], [plrep_p:<y>|<z>]: "PLural REPlace Hero/Partner"
-Requires a divider "|" (vertical slash) within the tag parameter. The tag is replaced with the contents to the left of this divider, <y>, if the hero/partner does *not* use the plural pronoun, and the contents to the right of the divider, <z>, if they do.
+- [plif_h:<y>],  [plif_p:<y>]  –  "IF PLural Hero" / "IF PLural Partner"
+- [plnot_h:<y>],  [plnot_p:<y>]  –  "if NOT PLural Hero" / "if NOT PLural Partner"
+- [plrep_h:<y>|<z>],  [plrep_p:<y>|<z>]  –  "PLural REPlace Hero" / "PLural REPlace Partner"
+The divider character (vertical slash "|") is necessary in the "plrep" tag.
+<z> or <y> is put into the line of dialogue, depending on whether the target uses the plural pronoun (they/them) or not.
 
-These tags are to be used alongside the pronoun tags to account for minor sentence differences with the plural pronoun (they/them)
-"[pr_h:they] seem[plnot_h:s]" -> "he/she seems" or "they seem"
-"[pr_p:they] ha[plrep_p:s|ve]" -> "he/she has" or "they have"
+More detailed documentation (as well as example uses) can be found here: 
+https://github.com/itred12/itred-eos-asm/blob/main/skypatches/PronounTextCodes/readme.md
 
-
-Only made possible thanks to the incredible help and patience of Chesyon, Happylappy, Frostbyte, and Assidion. \n
+Only made possible thanks to the incredible help and patience of Chesyon, Happylappy, Frostbyte, and Assidion.
     """
 
     @property
@@ -67,7 +60,7 @@ Only made possible thanks to the incredible help and patience of Chesyon, Happyl
 
     @property
     def version(self) -> str:
-        return '0.2.0'
+        return '0.2.1'
 
     
     def depends_on(self) -> list[str]:

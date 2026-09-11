@@ -2,9 +2,9 @@
 
 // HEY!!!! MODIFY THIS LINE (the part after the "+") IF YOU'RE HAVING ISSUES WITH THIS PATCH CLASHING WITH ANY OTHERS YOU'RE USING!!!
 .orga 0x30F70 + 0x02000 ; Change 0x02000 to a different offset if another patch you're using also occupies this area
-.area 0x234
+.area 0x230
 
-; After new tag set: 314 -> 562
+; After new tag set: 314 -> 560
 ; Not nearly as bad as I was expecting
 ; + potentially some room for more optimization
 
@@ -19,7 +19,8 @@ NextString:
     ; r1: array of strings
     ; returns: r1, offset to the next string in the array
     ; Does not do bounds checking! Be aware!
-    mov r3, lr ; Grab the return address and put it somewhere that nds_strchr doesn't mess with, so we can return after its call
+    
+    push lr ; Grab the return address and put it somewhere that nds_strchr doesn't mess with, so we can return after its call
 
     mov r0, r1
     mov r1, #0x0 ; Load the byte "0" to search for the string terminator
@@ -33,7 +34,10 @@ NextString:
     ; Now is address pointing to the start of the *next* string
     add r0, #0x1
     mov r1, r0 ; Move it back
-    bx r3 ; Return to the address we stored before
+    
+    ; Return to the address we stored before
+    pop pc
+    bx lr 
 
 
 NextNStrings:
@@ -42,17 +46,17 @@ NextNStrings:
     ; r2: the element # in the string array to find (n)
     ; returns: r1, as the same array offset to the (n)th index
 
-    mov r7, lr ; We'll need this to return later, this return will be used in the following loop
+    push lr ; We'll need this to return later, this return will be used in the following loop
     mov r6, #0x0 ; also initalize this
     mov r4, r2 ; Can't use r2 because nextString's call to nds_strchr uses it
-    
-    b _NextNStringsLoop
 
     
 _NextNStringsLoop:
 
     cmp r6, r4
-    bxeq r7 ; Return to the link we stored at the beginning if we're at the target index
+    ; Return to the link we stored at the beginning if we're at the target index
+    popeq pc 
+    bxeq lr 
 
     bl NextString
     
@@ -68,7 +72,8 @@ GetUsableGender:
     ; male: 0x0
     ; female: 0x1
     ; genderless, invalid: 0x2
-    mov r3, lr ; Store the current return address, as it'll be overwritten otherwise
+
+    push lr ; Store the current return address, as it'll be overwritten otherwise
 
     ; Grab the ID
     ldrh r0, [r0, #0x4]
@@ -88,18 +93,10 @@ GetUsableGender:
     ; female: 0x1
     ; genderless, invalid: 0x2
 
-    bx r3 ; return
+    ; Grab our return link from da stack (?)
+    pop pc
+    bx lr ; return
 
-
-ReplaceWithTerminator:
-    ; Places a terminator character (0x0) into the pointer to a string r0
-    mov r5, lr ; Need to return after the call to nds_memset
-
-    mov r1, #0x0 ; terminator char
-    mov r2, #0x1 ; Fill one
-    bl nds_memset
-
-    bx r5
 
 ; ------------------------------------------------------------------------------
 ;                                Main functions
@@ -109,16 +106,16 @@ ReplaceWithTerminator:
 
 HookPLetter: 
 
-    ; Retrieve the tag_string (the part before the ":") from register 13 at 0xb4
+    ; Get our tags to compare with
     ldr r1, =TAG_STRING
     mov r6, #0x0 ; as well as an arbitrary counter
-    ; Start da loop
-    b FindTag
+    ; Labels are fall-through, so this starts the loop
 
 
 FindTag:    
     ; r1 should be our tag string
     ; r6 should be an arbitrary counter
+
     ldr r0, [r13, #0xB4]
     bl StrcmpTag
     cmp r0, #0x0
@@ -136,7 +133,6 @@ FindTag:
     b FindTag
 
     
-
 FoundTag:
     ; Because the partner tag is only every other tag, then if the counter has the first bit set, it's a partner tag (if r6 is odd)
     tst r6, #1
@@ -257,8 +253,10 @@ BasicPluralTag:
     ldr r0, [r13, #0xB8] 
     mov r1, #0x5D ; character "]"
     bl nds_strchr
+
     ; Overwrite it with a terminator
-    bl ReplaceWithTerminator
+    mov r1, #0x0
+    strb r1, [r0], #0x0
     
     ldr r1, [r13, #0xB8] 
     b AppendToBuf
@@ -276,7 +274,9 @@ StartPluralRepTag:
     cmp r0, #0x0 ; If we don't find one, then fail
     beq PTagFailedBranch
 
-    bl ReplaceWithTerminator
+    ; r0 is now a pointer to the "|"
+    mov r1, #0x0
+    strb r1, [r0], #0x0
     
     ldr r1, [r13, #0xB8]
 
@@ -296,8 +296,9 @@ PluralRepRight:
     mov r6, r1 ; Copy the address of the start of this string for use later
     mov r1, #0x5D ; character "]"
     bl nds_strchr
-
-    bl ReplaceWithTerminator
+   
+    mov r1, #0x0
+    strb r1, [r0], #0x0
 
     mov r1, r6 ; Move it back
     b AppendToBuf

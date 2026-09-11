@@ -104,7 +104,7 @@ For more complex sentences– or ones that use irregular plurals– the `plrep` 
 
 - This patch occupies Overlay 36, and thus, requires Skytemple's built-in `ExtraSpace` patch to be applied.
 
-- Due to the (somewhat ambitious) nature of this patch, it's rather large– being exactly 562 bytes (0x234) in size! It's located 0x02000 after the common area in Overlay 36 (address 0x32F70), and spans from there to address 0x331A2. 
+- Due to the (somewhat ambitious) nature of this patch, it's rather large– being exactly 560 bytes (0x230) in size! It's located 0x02000 after the common area in Overlay 36 (address 0x32F70), and spans from there to address 0x3319E. 
 
     - If you aren't certain what this means, then that's okay. Know that its location means that it won't ever conflict with any vanilla Skytemple patches, and it *hopefullly* won't conflict with many community-made patches. 
     
