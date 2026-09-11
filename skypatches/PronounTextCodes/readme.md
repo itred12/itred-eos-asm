@@ -20,7 +20,7 @@
 
 - `plnot_h`, `plnot_p`: "(if) **NOT** **PL**ural **H**ero/**P**artner" –  Inserts the contents of the tag parameter into the line if the hero or partner <u>*does not*</u> use a plural pronoun. Replaced with empty space otherwise.
 
-- `plrep_h`, `plrep_p`: "**PL**ural **REP**lace **H**ero/**P**artner" –  Requires a dividing character "|" (vertical slash) within the tag parameter. Inseerts the contents of the tag parameter to the <u>*left*</u> of this divider if the hero or partner <u>*does not*</u> use a plural pronoun, and the contents of the tag paramter to the <u>*right*</u> of this divider if they do.
+- `plrep_h`, `plrep_p`: "**PL**ural **REP**lace **H**ero/**P**artner" –  Requires a dividing character "|" (vertical slash) within the tag parameter. Inserts the contents of the tag parameter to the <u>*left*</u> of this divider if the hero or partner <u>*does not*</u> use a plural pronoun, and the contents of the tag paramter to the <u>*right*</u> of this divider if they do.
 
 ---
 # USAGE:
@@ -58,7 +58,7 @@ Or in more complex lines of dialogue, which would normally require a "nightmare 
 
 ---
 
-To account for the pronoun used for a genderless hero/partner technically being a plural pronoun, the grammar / string-substitution tags can be used, such as to append an "s" to a word when needed:
+To account for the pronoun used for a genderless hero/partner potentially being a plural pronoun, the grammar / string-substitution tags can be used, such as to append an "s" to a word when needed:
 
 ### **Sample sentence 3**:
 `"Oh, [pr_h:they] seem[plnot_h:s] to be coming to..."`
