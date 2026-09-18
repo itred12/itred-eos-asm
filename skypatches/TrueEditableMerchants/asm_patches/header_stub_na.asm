@@ -80,8 +80,9 @@
 .definelabel CHANSEY_MAYBINIT_IMMEDIATE, 0x238A720 ; r1, Portrait
 .definelabel CHANSEY_ENTRYPOINT_IMMEDIATE, 0x238C298 ; r3, Name
 
+
 ; Overlay 25
-.definelabel XATU_ENTRYPOINT_IMMEDIATE, 0x238B1C8 ; r3, Name
+.definelabel XATU_ENTRYPOINT_IMMEDIATE, 0x238B188 ; r3, Name
 .definelabel XATU_MAYBEINIT_IMMEDIATE, 0x238A780 ; r1, Portrait
 
 ; Overlay 26

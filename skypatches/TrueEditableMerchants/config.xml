@@ -71,7 +71,7 @@
             <Param name="ASSEMBLY_SPECIES" label="Assembly organizer (Chimecho)" min="0" max="2047" default="390" type="int"/>
             <Param name="BANKER_SPECIES" label="Banker (Duskull)" min="0" max="2047" default="387" type="int"/>
             <Param name="NURSERY_SPECIES" label="Daycare caretaker (Chansey)" min="0" max="2047" default="113" type="int"/>
-            <Param name="LINKSHOP_SPECIES" label="Link shop owner (Electivire)" min="0" max="2047" default="507" type="int"/>
+            <Param name="LINKSHOP_SPECIES" label="Link shop owner (Electivire)" min="0" max="2047" default="508" type="int"/>
             <Param name="GENERAL_SHOP_SPECIES" label="General shop owner (Green Kecleon)" min="0" max="2047" default="383" type="int"/>
             <Param name="WARES_SHOP_SPECIES" label="Wares shop owner (Purple Kecleon)" min="0" max="2047" default="384" type="int"/>
             <Param name="BOXAPPRAISAL_SPECIES" label="Appraisal locksmith (Xatu)" min="0" max="2047" default="113" type="int"/>

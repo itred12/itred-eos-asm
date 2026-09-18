@@ -1,7 +1,7 @@
 ; Back in the building again!
 .org 0x023A7080 
 .orga 0x30F70 + 0x04000 ; Someplace hopefully out-of-the-way after the common area
-.area 0x3C ; 44 bytes
+.area 0x74 ; 104 bytes
 
 ; As Happylappy graciously explained to me, you can only store a single "literal" byte in a `mov` instruction
 ; So monster IDs >255 can't be loaded directly without a few extra instructions to grab it from a literal pool
@@ -36,6 +36,7 @@ GETMON_RECYCLE_SHOP_WYNAUT_R3:
 
 GETMON_WARES_SHOP_PURPLEKECLEON:
     ldr r1, =WARES_SHOP_SPECIES
+    str r1, [r0, #0x9c] ; Also update the speaker_id
     bx lr
     .pool
 
@@ -55,7 +56,7 @@ GETMON_DAYCARE_CHANSEY_R1:
     .pool
 
 GETMON_DAYCARE_CHANSEY_R3:
-    ldr r1, =NURSERY_SPECIES
+    ldr r3, =NURSERY_SPECIES
     bx lr
     .pool
 
