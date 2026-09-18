@@ -52,6 +52,14 @@
           <OpenBin filepath="overlay/overlay_0024.bin">
             <Include filename ="patch_ov24.asm"/>
           </OpenBin>
+          <!--Xatu appraisial-->
+          <OpenBin filepath="overlay/overlay_0025.bin">
+            <Include filename ="patch_ov25.asm"/>
+          </OpenBin>
+          <!--Chatot mission rewards-->
+          <OpenBin filepath="overlay/overlay_0026.bin">
+            <Include filename ="patch_ov26.asm"/>
+          </OpenBin>
           <!--Support for NPCs who have a non-immediate ID (Explanation by Frostbyte: https://discord.com/channels/710190644152369162/1549820809328074862/1550234833261690951)-->
           <OpenBin filepath="overlay/overlay_0036.bin">
             <Include filename ="patch_ov36.asm"/>
@@ -71,9 +79,6 @@
             
             <Param name="BARTENDER_SPECIES" label="Cafe bartender (Spinda)" min="0" max="2047" default="354" type="int"/>
             <Param name="RECYCLE_SHOP_SPECIES" label="Recycle shop owner (Wynaut)" min="0" max="2047" default="393" type="int"/>
-            
-            
-            
             
             <Param name="SWAP_SHOP_SPECIES" label="Swap-shop owner (Croagunk)" min="0" max="2047" default="495" type="int"/>
             <Param name="SENTRY_DUTY_DIGLETT" label="Diglett (sentry duty minigame)" min="0" max="2047" default="50" type="int"/>
