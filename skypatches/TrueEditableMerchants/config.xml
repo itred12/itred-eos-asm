@@ -74,11 +74,11 @@
             <Param name="LINKSHOP_SPECIES" label="Link shop owner (Electivire)" min="0" max="2047" default="508" type="int"/>
             <Param name="GENERAL_SHOP_SPECIES" label="General shop owner (Green Kecleon)" min="0" max="2047" default="383" type="int"/>
             <Param name="WARES_SHOP_SPECIES" label="Wares shop owner (Purple Kecleon)" min="0" max="2047" default="384" type="int"/>
-            <Param name="BOXAPPRAISAL_SPECIES" label="Appraisal locksmith (Xatu)" min="0" max="2047" default="113" type="int"/>
+            <Param name="BOXAPPRAISAL_SPECIES" label="Appraisal locksmith (Xatu)" min="0" max="2047" default="178" type="int"/>
             <Param name="STORAGE_SPECIES" label="Storage manager (Kangaskhan)" min="0" max="2047" default="115" type="int"/>
             
-            <Param name="BARTENDER_SPECIES" label="Cafe bartender (Spinda)" min="0" max="2047" default="354" type="int"/>
-            <Param name="RECYCLE_SHOP_SPECIES" label="Recycle shop owner (Wynaut)" min="0" max="2047" default="393" type="int"/>
+            <Param name="BARTENDER_SPECIES" label="Cafe bartender (Spinda)" min="0" max="2047" default="355" type="int"/>
+            <Param name="RECYCLE_SHOP_SPECIES" label="Recycle shop owner (Wynaut)" min="0" max="2047" default="392" type="int"/>
             
             <Param name="SWAP_SHOP_SPECIES" label="Swap-shop owner (Croagunk)" min="0" max="2047" default="495" type="int"/>
             <Param name="SENTRY_DUTY_DIGLETT" label="Diglett (sentry duty minigame)" min="0" max="2047" default="50" type="int"/>

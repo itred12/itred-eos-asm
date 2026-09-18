@@ -39,12 +39,11 @@ class PatchHandler(AbstractPatchHandler, DependantPatch):
     def description(self) -> str:
         return """
 Requires ExtraSpace. Allows the portraits and names that show up in the various merchant and merchant-adjacent menus to be modified.
-Re-apply this patch to select new values for these pokemon.
-
-Note that monster IDs beyond 1199 are invalid without the ExpandPokeList patch applied. Using those entries without it could result in very unpredictable behavior!
+Make sure to check that these replacement pokemon have the needed portraits! (Typically at least "normal" and "happy")
+You can re-apply this patch to select new values for these pokemon.
 
 Initial research into modifying merchant portraits (as well as pointers and advice for this patch) by Happylappy
-Further research into modifying names + cleanup into a Skypatch done by Itred12
+Further research into modifying names, bug-fixing, + cleanup into a Skypatch done by Itred12
     """
 
     @property
