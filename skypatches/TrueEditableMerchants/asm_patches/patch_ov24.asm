@@ -1,0 +1,10 @@
+; Overlay 24 (Chansey Daycare)
+.org CHANSEY_ENTRYPOINT_IMMEDIATE
+.area 0x4
+    bl GETMON_DAYCARE_CHANSEY_R3
+.endarea
+
+.org CHANSEY_MAYBINIT_IMMEDIATE
+.area 0x4
+    bl GETMON_DAYCARE_CHANSEY_R1
+.endarea

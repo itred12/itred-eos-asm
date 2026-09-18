@@ -1,0 +1,17 @@
+; Overlay 18 (Electivire link shop)
+
+.org IMMEDIATE_ELECTIVIRE_ID1
+.area 0x4
+    bl GETMON_LINK_SHOP_ELECTIVIRE
+.endarea
+
+.org IMMEDIATE_ELECTIVIRE_ID2
+.area 0x4
+    bl GETMON_LINK_SHOP_ELECTIVIRE
+.endarea
+
+
+.org IMMEDIATE_ELECTIVIRE_GETPORTRAIT
+.area 0x4
+    bl GETMON_LINK_SHOP_ELECTIVIRE
+.endarea

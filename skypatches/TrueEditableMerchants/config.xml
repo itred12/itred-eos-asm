@@ -1,0 +1,92 @@
+<PMD2>
+  <!--=======================================================================-->
+  <!--ASM Patches Constants-->
+  <!--=======================================================================-->
+  <!--Put the data defining your patch here.-->
+  <ASMPatchesConstants>
+
+    <!--*******************-->
+    <!--Patches list-->
+    <!--*******************-->
+    <!--Patching steps for applying various asm patches on the game-->
+    <Patches>
+      <Game id="EoS_NA">
+        <Patch id="TrueEditableMerchants">
+          <!--Sentry Duty-->
+          <OpenBin filepath="overlay/overlay_0014.bin">
+            <Include filename ="patch_ov14.asm"/>
+          </OpenBin>
+          <!--Duskull bank-->
+          <OpenBin filepath="overlay/overlay_0015.bin">
+            <Include filename ="patch_ov15.asm"/>
+          </OpenBin>
+          <!--Chimecho assembly-->
+          <OpenBin filepath="overlay/overlay_0017.bin">
+            <Include filename ="patch_ov17.asm"/>
+          </OpenBin>
+          <!--Electivire link shop-->
+          <OpenBin filepath="overlay/overlay_0018.bin">
+            <Include filename ="patch_ov18.asm"/>
+          </OpenBin>
+          <!--Spinda cafe-->
+          <OpenBin filepath="overlay/overlay_0019.bin">
+            <Include filename ="patch_ov19.asm"/>
+          </OpenBin>
+          <!--Spinda cafe recycle shop-->
+          <OpenBin filepath="overlay/overlay_0020.bin">
+            <Include filename ="patch_ov20.asm"/>
+          </OpenBin>
+          <!--Croagunk swap-shop-->
+          <OpenBin filepath="overlay/overlay_0021.bin">
+            <Include filename ="patch_ov21.asm"/>
+          </OpenBin>
+          <!--Kecleon bros. store-->
+          <OpenBin filepath="overlay/overlay_0022.bin">
+            <Include filename ="patch_ov22.asm"/>
+          </OpenBin>
+          <!--Kangaskhan storage-->
+          <OpenBin filepath="overlay/overlay_0023.bin">
+            <Include filename ="patch_ov23.asm"/>
+          </OpenBin>
+          <!--Chansey daycare-->
+          <OpenBin filepath="overlay/overlay_0024.bin">
+            <Include filename ="patch_ov24.asm"/>
+          </OpenBin>
+          <!--Support for NPCs who have a non-immediate ID (Explanation by Frostbyte: https://discord.com/channels/710190644152369162/1549820809328074862/1550234833261690951)-->
+          <OpenBin filepath="overlay/overlay_0036.bin">
+            <Include filename ="patch_ov36.asm"/>
+          </OpenBin>
+
+          <!--Params-->
+          <Parameters>
+
+            <Param name="ASSEMBLY_SPECIES" label="Assembly organizer (Chimecho)" min="0" max="2047" default="390" type="int"/>
+            <Param name="BANKER_SPECIES" label="Banker (Duskull)" min="0" max="2047" default="387" type="int"/>
+            <Param name="NURSERY_SPECIES" label="Daycare caretaker (Chansey)" min="0" max="2047" default="113" type="int"/>
+            <Param name="LINKSHOP_SPECIES" label="Link shop owner (Electivire)" min="0" max="2047" default="507" type="int"/>
+            <Param name="GENERAL_SHOP_SPECIES" label="General shop owner (Green Kecleon)" min="0" max="2047" default="383" type="int"/>
+            <Param name="WARES_SHOP_SPECIES" label="Wares shop owner (Purple Kecleon)" min="0" max="2047" default="384" type="int"/>
+            <Param name="BOXAPPRAISAL_SPECIES" label="Appraisal locksmith (Xatu)" min="0" max="2047" default="113" type="int"/>
+            <Param name="STORAGE_SPECIES" label="Storage manager (Kangaskhan)" min="0" max="2047" default="115" type="int"/>
+            
+            <Param name="BARTENDER_SPECIES" label="Cafe bartender (Spinda)" min="0" max="2047" default="354" type="int"/>
+            <Param name="RECYCLE_SHOP_SPECIES" label="Recycle shop owner (Wynaut)" min="0" max="2047" default="393" type="int"/>
+            
+            
+            
+            
+            <Param name="SWAP_SHOP_SPECIES" label="Swap-shop owner (Croagunk)" min="0" max="2047" default="495" type="int"/>
+            <Param name="SENTRY_DUTY_DIGLETT" label="Diglett (sentry duty minigame)" min="0" max="2047" default="50" type="int"/>
+            <Param name="SENTRY_DUTY_LOUDRED" label="Loudred (sentry duty minigame)" min="0" max="2047" default="322" type="int"/>
+            <Param name="SENTRY_DUTY_CHATOT" label="Chatot (sentry duty minigame)" min="0" max="2047" default="483" type="int"/>
+            <Param name="SENTRY_DUTY_GROVYLE" label="Story Grovyle (explicitly excluded from footprint pool)" min="0" max="2047" default="281" type="int"/>
+
+            <Param name="MISSION_REWARD_SPECIES" label="Mission Rewards/Guild Treasurer (Chatot)" min="0" max="2047" default="483" type="int"/>
+
+          </Parameters>
+        </Patch>
+      </Game>
+    </Patches>
+  </ASMPatchesConstants>
+</PMD2>
+

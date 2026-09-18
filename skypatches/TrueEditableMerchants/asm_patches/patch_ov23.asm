@@ -1,0 +1,10 @@
+; Overlay 23 (Kangaskhan Storage)
+.org KANGASKHAN_ENTRYPOINT_IMMEDIATE
+.area 0x4
+    bl GETMON_STORAGE_KANGASKHAN_R3
+.endarea
+
+.org KANGASKHAN_SUBCASE_IMMEDIATE
+.area 0x4
+    bl GETMON_STORAGE_KANGASKHAN_R4
+.endarea

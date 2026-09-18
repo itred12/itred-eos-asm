@@ -1,0 +1,18 @@
+
+
+; Overlay 20 (Spinda cafe recycle shop)
+
+.org IMMEDIATE_WYNAUT_NORMPORTRAIT
+.area 0x4
+    bl GETMON_RECYCLE_SHOP_WYNAUT_R1
+.endarea
+
+.org IMMEDIATE_WYNAUT_PRINTEXTBOX
+.area 0x4
+    bl GETMON_RECYCLE_SHOP_WYNAUT_R2
+.endarea
+
+.org IMMEDIATE_WYNAUT_SIMPLEMENU
+.area 0x4
+    bl GETMON_RECYCLE_SHOP_WYNAUT_R3
+.endarea

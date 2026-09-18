@@ -1,0 +1,10 @@
+; Overlay 22 (Kecleon bros. shop)
+.org GREENKECLEON_ENTRYPOINT_HWORD
+.area 0x4
+    .word GENERAL_SHOP_SPECIES
+.endarea
+
+.org PURPLEKECLEON_ENTRYPOINT_IMMEDIATE
+.area 0x4
+    bl GETMON_WARES_SHOP_PURPLEKECLEON
+.endarea
