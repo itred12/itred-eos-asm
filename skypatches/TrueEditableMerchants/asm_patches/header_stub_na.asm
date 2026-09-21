@@ -45,6 +45,7 @@
 .definelabel IMMEDIATE_ELECTIVIRE_ID1, 0x238B164 
 .definelabel IMMEDIATE_ELECTIVIRE_ID2, 0x238B1E4
 .definelabel IMMEDIATE_ELECTIVIRE_GETPORTRAIT, 0x238B4DC 
+.definelabel IMMEDIATE_ELECTIVIRE_WHOWANTSTOLINK, 0x238BC34
 
 ; Overlay 17
 .definelabel CHIMECHO_INIT_HWORD, 0x0238B078
@@ -59,6 +60,7 @@
 .definelabel GROVYLE_HWORD, 0x0238CA64
 .definelabel IMMEDIATE_DIGLETT_END, 0x0238BDDC
 .definelabel IMMEDIATE_DIGLETT_SORRYTOKEEPYOUWAITING, 0x0238BCA4 ; (I had to legitimately do a quintuple-take when I saw this in memory)
+.definelabel BIZZARE_LOUDRED_MATH, 0x238BBB4 ; For some reason they?? Load Loudred's speaker ID by subtracting some amount from a string ID???? Despite it doing literally nothing compared to loading his hword from memory???? Why?????????
 
 ; Overlay 20
 .definelabel IMMEDIATE_WYNAUT_NORMPORTRAIT, 0x238B4D8 ; this must be at r1

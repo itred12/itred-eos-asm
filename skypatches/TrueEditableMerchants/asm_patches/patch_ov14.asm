@@ -25,3 +25,7 @@
     bl GETMON_SENTRY_DUTY_DIGLETT
 .endarea
 
+.org BIZZARE_LOUDRED_MATH
+.area 0x4
+    ldr r3, [LOUDRED_HWORD] ; TEST LATER
+.endarea

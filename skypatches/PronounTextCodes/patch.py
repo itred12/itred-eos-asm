@@ -35,18 +35,7 @@ class PatchHandler(AbstractPatchHandler, DependantPatch):
     @property
     def description(self) -> str:
         return """
-Adds the following text tags:
-
-PRONOUN TAGS:
-- [pr_h:<x>],  [pr_p:<x>]  –  "PRonoun Hero" / "PRonoun Partner"
-<x> can be \"they\", \"them\", \"their\", or \"theirs\", which will become the corrosponding pronoun for the target.
-
-GRAMMAR TAGS:
-- [plif_h:<y>],  [plif_p:<y>]  –  "IF PLural Hero" / "IF PLural Partner"
-- [plnot_h:<y>],  [plnot_p:<y>]  –  "if NOT PLural Hero" / "if NOT PLural Partner"
-- [plrep_h:<y>|<z>],  [plrep_p:<y>|<z>]  –  "PLural REPlace Hero" / "PLural REPlace Partner"
-The divider character (vertical slash "|") is necessary in the "plrep" tag.
-<z> or <y> is put into the line of dialogue, depending on whether the target uses the plural pronoun (they/them) or not.
+Adds text tags to dynamically insert pronouns for the hero and parter depending on their gender.
 
 More detailed documentation (as well as example uses) can be found here: 
 https://github.com/itred12/itred-eos-asm/blob/main/skypatches/PronounTextCodes/readme.md
@@ -60,7 +49,7 @@ Only made possible thanks to the incredible help and patience of Chesyon, Happyl
 
     @property
     def version(self) -> str:
-        return '0.2.1'
+        return '0.2.2'
 
     
     def depends_on(self) -> list[str]:
