@@ -1,0 +1,32 @@
+<PMD2>
+  <!--=======================================================================-->
+  <!--ASM Patches Constants-->
+  <!--=======================================================================-->
+  <!--Put the data defining your patch here.-->
+  <ASMPatchesConstants>
+
+    <!--*******************-->
+    <!--Patches list-->
+    <!--*******************-->
+    <!--Patching steps for applying various asm patches on the game-->
+    <Patches>
+      <Game id="EoS_NA">
+        <Patch id="LinkShopBudgeting">
+        
+          <OpenBin filepath="overlay/overlay_0018.bin">
+            <Include filename ="patch_ov18.asm"/>
+          </OpenBin>
+	      <OpenBin filepath="overlay/overlay_0036.bin">
+            <Include filename ="patch_ov36.asm"/>
+          </OpenBin>
+          
+          <Parameters>
+            <Param name="LINK_SHOP_COST" label="Link shop price" min="0" max="9999" default="500" type="int"/>
+          </Parameters>
+          <!-- Copy the above three lines for every file the patch modifies. -->
+        </Patch>
+      </Game>
+    </Patches>
+  </ASMPatchesConstants>
+</PMD2>
+
