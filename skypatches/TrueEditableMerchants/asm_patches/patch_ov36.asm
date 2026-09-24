@@ -1,7 +1,7 @@
 ; Back in the building again!
 .org 0x023A7080 
 .orga 0x30F70 + 0x04000 ; Someplace hopefully out-of-the-way after the common area
-.area 0x89 ; 124 bytes
+.area 0xA0 ; 176 bytes to be safe (not sure how much all of these take if all non-immediate)
 
 ; As Happylappy graciously explained to me, you can only store a single "literal" byte in a `mov` instruction
 ; So monster IDs >255 can't be loaded directly without a few extra instructions to grab it from a literal pool
@@ -45,6 +45,16 @@ GETMON_WARES_SHOP_PURPLEKECLEON:
     ; Also update the speaker_id
     ldr r0,[r0, #0x0]
     str r1, [r0, #0x9c] 
+    bx lr
+    .pool
+
+
+HANDLEMON_KEC_SHOP_UPDATESPEAKER:
+    ldrb r2, [r1, #0x8] ; is_green_kec
+    cmp  r2, #0x0
+    ldreq r2, =WARES_SHOP_SPECIES
+    ldrne r2, =GENERAL_SHOP_SPECIES
+    str r2, [r1, #0x9c] ; Original instruction
     bx lr
     .pool
 

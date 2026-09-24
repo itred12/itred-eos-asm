@@ -1,6 +1,6 @@
 .org 0x023A7080 
 .orga 0x30F70 + 0x03000 ; Someplace hopefully out-of-the-way after the common area
-.area 0x18 ; 24 bytes is prob all I need
+.area 0x20 ; 24 bytes is prob all I need
 
 GetLinkShopPrice:
     ldr r0, =LINK_SHOP_COST
