@@ -1,0 +1,31 @@
+<PMD2>
+  <!--=======================================================================-->
+  <!--ASM Patches Constants-->
+  <!--=======================================================================-->
+  <!--Put the data defining your patch here.-->
+  <ASMPatchesConstants>
+
+    <!--*******************-->
+    <!--Patches list-->
+    <!--*******************-->
+    <!--Patching steps for applying various asm patches on the game-->
+    <Patches>
+      <Game id="EoS_NA">
+        <Patch id="ChangeDungeonFloorText">
+	      <OpenBin filepath="arm9.bin">
+            <Include filename ="patch_arm9.asm"/>
+          </OpenBin>
+          
+          <Parameters>
+            <Param name="FLOOR_PREFIX" label="Basement floor prefix ('B') [MUST BE ONE CHARACTER!!! WILL BREAK OTHERWISE!!!]" min="0" max="1" default='B' type="str"/>
+          </Parameters>
+          <Parameters>
+            <Param name="FLOOR_SUFFIX" label="Floor suffix ('F') [MUST BE ONE CHARACTER!!! WILL BREAK OTHERWISE!!!]" min="0" max="1" default='F' type="str"/>
+          </Parameters>
+          <!-- Copy the above three lines for every file the patch modifies. -->
+        </Patch>
+      </Game>
+    </Patches>
+  </ASMPatchesConstants>
+</PMD2>
+
