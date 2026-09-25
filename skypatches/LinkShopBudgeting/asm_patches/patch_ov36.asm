@@ -1,18 +1,27 @@
 .org 0x023A7080 
 .orga 0x30F70 + 0x03000 ; Someplace hopefully out-of-the-way after the common area
-.area 0x20 ; 24 bytes is prob all I need
+.area 0x3A ; 42 bytes is prob all I need
 
 GetLinkShopPrice:
     ldr r0, =LINK_SHOP_COST
     bx lr
-    .pool
 
 CmpLinkShopPrice:
+    push r1
     ldr r1, =LINK_SHOP_COST
     cmp r0, r1
-    mov r1, #0x0 ; Restores r1 to the value it was before we used it for the cmp
+    pop r1
     bx lr
-    .pool
+
+SubLinkShopPrice:
+    push r1
+    ldr r1, =LINK_SHOP_COST
+    subne r0, r0, r1 ; Original instruction, kinda
+    pop r1
+    bx lr
+
+
+.pool
 
 .endarea
 
