@@ -22,3 +22,8 @@
 .area 0x4
     bl GetLinkShopPrice
 .endarea
+
+.org BlockLinkingIfNotEnoughMoney
+.area 0x4
+    bl CmpLinkShopPrice
+.endarea

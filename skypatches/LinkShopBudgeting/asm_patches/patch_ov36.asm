@@ -19,6 +19,7 @@ SubLinkShopPrice:
     subne r0, r0, r1 ; Original instruction, kinda
     pop r1
     bx lr
+    
 
 
 .pool
