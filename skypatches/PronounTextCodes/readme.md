@@ -1,21 +1,22 @@
+# Pronoun Text Codes
  Adds the `[pr_h:<x>]` and `[pr_p:<x>]` text codes, for automatically grabbing the pronouns of the hero or partner in dialogue,
  as well as logical tagcodes for dealing with small grammar differences when using the plural pronoun (they/them)
 
 ---
 
-# TAG CODES
+## **TEXT TAGS**
 
-## Pronoun tag codes:
+## Pronouns:
 - `pr_h`: "**PR**onoun **H**ero" – Replaced with the hero's pronoun of the given type.
 - `pr_p`: "**PR**onoun **P**artner" – Replaced with the partner's pronoun of the given type.
 
-## Pronoun tag code arguments:
-- `they`: The subjective pronoun (he/she/they)
-- `them`: The objective pronoun (him/her/them)
-- `their`: The possessive pronoun (his/her/their)
-- `theirs`: The plural possessive pronoun (his/hers/theirs)
+    #### Arguments
+    - `they`: The subjective pronoun (he/she/they)
+    - `them`: The objective pronoun (him/her/them)
+    - `their`: The possessive pronoun (his/her/their)
+    - `theirs`: The plural possessive pronoun (his/hers/theirs)
 
-## Grammar tag codes:
+## Grammar:
 - `plif_h`, `plif_p`: "**IF** **PL**ural **H**ero/**P**artner"  – Inserts the contents of the tag parameter into the line <u>*if*</u> the hero or partner (respectively) uses a plural pronoun. Replaced with empty space otherwise.
 
 - `plnot_h`, `plnot_p`: "(if) **NOT** **PL**ural **H**ero/**P**artner" –  Inserts the contents of the tag parameter into the line if the hero or partner <u>*does not*</u> use a plural pronoun. Replaced with empty space otherwise.
@@ -23,11 +24,14 @@
 - `plrep_h`, `plrep_p`: "**PL**ural **REP**lace **H**ero/**P**artner" –  Requires a dividing character "|" (vertical slash) within the tag parameter. Inserts the contents of the tag parameter to the <u>*left*</u> of this divider if the hero or partner <u>*does not*</u> use a plural pronoun, and the contents of the tag paramter to the <u>*right*</u> of this divider if they do.
 
 ---
-# USAGE:
+
+## **USAGE**:
+
+### **Basic substitution**:
 
 This can be used in basic lines of dialogue to avoid needing an unwieldy switch case:
 
-### **Sample sentence**:
+
 
  `"Hey, is that... [hero]? But who's the Pokémon next to [pr_h:them]...?"` <br></br>
 
@@ -40,11 +44,12 @@ This can be used in basic lines of dialogue to avoid needing an unwieldy switch 
 - (With a genderless hero) 
   >"Hey, is that... <heroname\>? But who's the Pokémon next to them...?" 
 
----
+<br></br>
+
+### **Complex substitution**:
 
 Or in more complex lines of dialogue, which would normally require a "nightmare spaghetti mess" of switch cases to account for all possible combinations:
 
-### **Sample sentence 2**:
  `"From the way [partner]'s face dropped when [pr_p:they] found out [hero] wouldn't be there, because of [pr_h:their] injury... [pr_p:they] seemed so heartbroken..."` <br></br>
 
 - (With a genderless hero and female partner) 
@@ -56,11 +61,12 @@ Or in more complex lines of dialogue, which would normally require a "nightmare 
 - (With a female hero and female partner) 
   >"From the way <partnername\>'s face dropped when she found out <heroname\> wouldn't be there, because of her injury... she seemed so heartbroken..." <br></br>
 
----
+<br></br>
+
+### **Grammar tags**:
 
 To account for the pronoun used for a genderless hero/partner potentially being a plural pronoun, the grammar / string-substitution tags can be used, such as to append an "s" to a word when needed:
 
-### **Sample sentence 3**:
 `"Oh, [pr_h:they] seem[plnot_h:s] to be coming to..."`
 
 - (With a female hero)
@@ -72,12 +78,14 @@ To account for the pronoun used for a genderless hero/partner potentially being 
 - (With a genderless hero)
   > "Oh, they seem to be coming to..."
 
----
+<br></br>
+
+### **Grammar tags (contd.)**:
 
 For more complex sentences– or ones that use irregular plurals– the `plrep` tag can be used to account for either case:
 
-### **Sample sentence 4**:
-"Well, `[pr_p:they]` certainly ha`[plrep_p:s|ve]` a funny way of doing things..."
+
+`"Well, [pr_p:they] certainly ha[plrep_p:s|ve] a funny way of doing things..."`
 
 - (With a male partner)
   > "Well, he certainly has a funny way of doing things..."
@@ -91,7 +99,7 @@ For more complex sentences– or ones that use irregular plurals– the `plrep` 
 ---
 
 
-# NOTES:
+## **NOTES:**
 
 - As of 0.1.0, "invalid" gender pokemon will be treated the same way as genderless ones (using neutral pronouns). This most likely affects nothing, since I believe you don't ever encounter the "invalid" gender except in error, but it was more efficient to do it this way regardless.
 
@@ -100,7 +108,9 @@ For more complex sentences– or ones that use irregular plurals– the `plrep` 
 
 <br></br>
 
-# SPACE
+---
+
+## **SPACE**
 
 - This patch occupies Overlay 36, and thus, requires Skytemple's built-in `ExtraSpace` patch to be applied.
 
@@ -112,7 +122,9 @@ For more complex sentences– or ones that use irregular plurals– the `plrep` 
 
 <br></br>
 
-# CONCLUSION
+---
+
+## **CONCLUSION**
 
 - This is my first ever Skypatch, and my first-ever real program made entirely in ASM. I've tested it quite thoroughly, but not I'm not perfect! <u>**Make a backup of your ROM before applying!!!!!!**</u>
 

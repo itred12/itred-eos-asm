@@ -1,5 +1,6 @@
 .org 0x023A7080 
-.orga 0x30F70 + 0x03000 ; Someplace hopefully out-of-the-way after the common area
+// ADJUST THE NUMBER TO THE RIGHT OF THE + TO CHANGE THE PATCH OFFSET IN OV36
+.orga 0x30F70 + 0x03000 
 .area 0x3A ; 42 bytes is prob all I need
 
 GetLinkShopPrice:
