@@ -6,17 +6,17 @@
 
 ## **TEXT TAGS**
 
-## Pronouns:
+### Pronouns:
 - `pr_h`: "**PR**onoun **H**ero" – Replaced with the hero's pronoun of the given type.
 - `pr_p`: "**PR**onoun **P**artner" – Replaced with the partner's pronoun of the given type.
 
-    #### Arguments
+    ##### PARAMETERS:
     - `they`: The subjective pronoun (he/she/they)
     - `them`: The objective pronoun (him/her/them)
     - `their`: The possessive pronoun (his/her/their)
     - `theirs`: The plural possessive pronoun (his/hers/theirs)
 
-## Grammar:
+### Grammar:
 - `plif_h`, `plif_p`: "**IF** **PL**ural **H**ero/**P**artner"  – Inserts the contents of the tag parameter into the line <u>*if*</u> the hero or partner (respectively) uses a plural pronoun. Replaced with empty space otherwise.
 
 - `plnot_h`, `plnot_p`: "(if) **NOT** **PL**ural **H**ero/**P**artner" –  Inserts the contents of the tag parameter into the line if the hero or partner <u>*does not*</u> use a plural pronoun. Replaced with empty space otherwise.
