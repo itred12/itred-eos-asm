@@ -1,18 +1,14 @@
-# Skypatch template
-This template contains the files inside of a skypatch, and some helper files for compilation[^1] and testing.
+# EditStatusDuration
+Allows for editing the minimum/maximum duration of status effects not listed in the Symbols tab.
+Can be applied more than once to modify these to these ranges again.
 
-This is the template I use to make all of my skypatches; though I've cleaned it up a little bit. The goal of this template is to make creation of ASM patches easier, for both more experienced hackers and people just starting out with ASM.
+## NOTES:
+- The minimum range for statuses is inclusive, and the maximum range is exclusive. Setting a status to have a minimum of 3 turns and a maximum of 5 turns means it'll effect the target for anywhere from 3 - 4 turns. (Source: CalcStatusDuration, DungeonRandRange)
 
-## Shell files
-These files do some quick file operations. There's no easy command line tool for making a zip on Windows[^2], so Linux (and maybe Mac) only, sorry! Make sure you open each of these files and replace "Template" with the name of the patch.
-* MakePatch.sh builds a skypatch file using config.xml, patch.py, and everything in the asm_patches folder. Also copies the newly made skypatch into the skytemple folder for test.nds.
-* ResetRom.sh copies base.nds in the tests folder over test.nds. This is intended to be used to quickly unapply your patch on test.nds so you can test again after making changes.
+- Setting a minimum greater than its maximum will effectively swap them– the minium becomes the maximum and vice-versa, including the exclusive/inclusive range rule mentioned above. (Source: DungeonRandRange)
 
-Maybe more coming in the future? Not sure.
+- A minimum and maximum equal to each-other will have the corrosponding status always be inflicted for that duration (i.e.,  a range of [10, 10) will just become 10 turns). (Source: DungeonRandRange)
+    
+- The maximum range you can set a status to is 127, which makes it last forever. (Source: TickStatusTurnCounter)
 
-[^1]: "Compilation" really just means "compression" here. A skypatch is just a renamed zip file.
-[^2]: 7zip seems to kind of work, but it's REALLY slow.
-
-# EXTRA NOTES BY ITRED
-* The Skypatch still needs to be applied after MakePatch. Even if skytemple says it is, re-apply it, or its changes won't actually take effect.
-* You can keep the ROM open in Skytemple, and then just reload it after ResetRom is ran
+- The minimum range you can set a status to is 1, which makes it fade on the turn after it was inflicted. (Source: CalcStatusDuration, most XREFs to CalcStatusDuration)

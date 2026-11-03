@@ -80,8 +80,8 @@ NOTES:
 # (Note 2 source: DungeonRandRange)
 # (Note 3 source: DungeonRandRange)
 # (Note 4 source: TickStatusTurnCounter)
-# (Note 5 source: CalcStatusDuration)
-# (Note 6 source: most XREFs to CalcStatusDuration)
+# (Note 5 source: CalcStatusDuration, most XREFs to CalcStatusDuration)
+
 
 
     @property
