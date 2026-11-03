@@ -1,0 +1,67 @@
+<PMD2>
+  <!--=======================================================================-->
+  <!--ASM Patches Constants-->
+  <!--=======================================================================-->
+  <!--Put the data defining your patch here.-->
+  <ASMPatchesConstants>
+
+    <!--*******************-->
+    <!--Patches list-->
+    <!--*******************-->
+    <!--Patching steps for applying various asm patches on the game-->
+    <Patches>
+      <Game id="EoS_NA">
+        <Patch id="EditStatusDuration">
+	      <OpenBin filepath="overlay/overlay_0010.bin">
+            <Include filename ="patch_ov10.asm"/>
+          </OpenBin>
+          <!-- Copy the above three lines for every file the patch modifies. -->
+          <Parameters>
+            <!-- The plate comments around these fields mark "127" as being handled as infinite, so I put the signed 8-bit integer limit as the max -->
+            <!-- even though these are typed as int16_t -->
+            <!-- CalcStatusDuration will always return 1 if the number given is below 1, so 1 is listed as the minimum here for that reason, too -->
+            <Param name="CROSSEYE_MIN_TURNS" label="Cross-eyed minimum turns (inclusive, default = 10)" min="1" max="127" default="10" type="int"/>
+            <Param name="CROSSEYE_MAX_TURNS" label="Cross-eyed maximum turns (exclusive, default = 10) " min="1" max="127" default="10" type="int"/>
+            
+            <Param name="BLINKER_MIN_TURNS" label="Blinker minimum turns (inclusive, default = 10)" min="1" max="127" default="10" type="int"/>
+            <Param name="BLINKER_MAX_TURNS" label="Blinker maximum turns (exclusive, default = 10) " min="1" max="127" default="10" type="int"/>
+
+            <Param name="PETRIFIED_MIN_TURNS_NPC" label="Petrified minimum turns when applied to NPCs (inclusive, default = 127 [infinite])" min="1" max="127" default="127" type="int"/>
+            <Param name="PETRIFIED_MAX_TURNS_NPC" label="Petrified maximum turns when applied to NPCs (exclusive, default = 127 [infinite])" min="1" max="127" default="127" type="int"/>
+            
+            <Param name="PETRIFIED_MIN_TURNS_PLAYER" label="Petrified minimum turns when applied to the player (inclusive, default = 10)" min="1" max="127" default="10" type="int"/>
+            <Param name="PETRIFIED_MAX_TURNS_PLAYER" label="Petrified maximum turns when applied to the player (inclusive, default = 20)" min="1" max="127" default="20" type="int"/>
+            
+            <Param name="PARALYSIS_MIN_TURNS" label="Paralysis minium turns (inclusive, default = 1)" min="1" max="127" default="1" type="int"/>
+            <Param name="PARALYSIS_MAX_TURNS" label="Paralysis maximum turns (exclusive, default = 2)" min="1" max="127" default="2" type="int"/>
+
+            <Param name="CONFUSION_MIN_TURNS" label="Confused minium turns (inclusive, default = 6)" min="1" max="127" default="6" type="int"/>
+            <Param name="CONFUSION_MAX_TURNS" label="Confused maximum turns (exclusive, default = 12)" min="1" max="127" default="12" type="int"/>
+
+            <Param name="DROPEYE_MIN_TURNS" label="Dropeye minium turns (inclusive, default = 40)" min="1" max="127" default="40" type="int"/>
+            <Param name="DROPEYE_MAX_TURNS" label="Dropeye maximum turns (exclusive, default = 50)" min="1" max="127" default="50" type="int"/>
+
+            <Param name="INVISIBLE_MIN_TURNS" label="Invisible minium turns (inclusive, default = 20)" min="1" max="127" default="20" type="int"/>
+            <Param name="INVISIBLE_MAX_TURNS" label="Invisible maximum turns (exclusive, default = 30)" min="1" max="127" default="30" type="int"/>
+
+            <Param name="INFATUATED_MIN_TURNS" label="Infatuated minium turns (inclusive, default = 4)" min="1" max="127" default="4" type="int"/>
+            <Param name="INFATUATED_MAX_TURNS" label="Infatuated maximum turns (exclusive, default = 6)" min="1" max="127" default="6" type="int"/>
+
+            <Param name="ENCORE_MIN_TURNS" label="Encore minium turns (inclusive, default = 10)" min="1" max="127" default="10" type="int"/>
+            <Param name="ENCORE_MAX_TURNS" label="Encore maximum turns (exclusive, default = 10)" min="1" max="127" default="10" type="int"/>
+
+            <Param name="TAUNT_MIN_TURNS" label="Taunt minium turns (inclusive, default = 10)" min="1" max="127" default="10" type="int"/>
+            <Param name="TAUNT_MAX_TURNS" label="Taunt maximum turns (exclusive, default = 12)" min="1" max="127" default="12" type="int"/>
+
+            <Param name="DECOY_MIN_TURNS" label="Decoy minium turns (inclusive, default = 20)" min="1" max="127" default="20" type="int"/>
+            <Param name="DECOY_MAX_TURNS" label="Decoy maximum turns (exclusive, default = 50)" min="1" max="127" default="50" type="int"/>
+
+            
+            
+          </Parameters>
+        </Patch>
+      </Game>
+    </Patches>
+  </ASMPatchesConstants>
+</PMD2>
+
